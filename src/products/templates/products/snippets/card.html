@@ -1,0 +1,23 @@
+
+  <div class="card">
+    {% if instance.image %}
+    <img class="card-img-top" style='width: auto; height: 180px;' src="{{instance.image.url}}" alt="{{instance.title}}">
+    {% endif %}
+    <div class="card-body">
+      <a href="{% url 'products:detail' slug=instance.slug %}">
+        <h5 class="card-title">{{instance.title}}</h5>
+        <!--<p class="card-text">{{instance.description|truncatewords:5}}</p>-->
+      </a>
+      <!--<p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>-->
+      <div class="text-center">
+        <!--<a href="{{ instance.get_absolute_url }}" class="btn text-white bg-info mb-3">Go</a>-->
+        <form method="POST" action="{% url 'carts:add' %}" class="form"> {% csrf_token %}
+          <input type="hidden" name="product_id" value="{{ instance.id }}" />
+          <button type="submit" class="btn text-white bg-info mb-3">Add to cart</button>
+        </form>
+      </div>
+    </div>
+    <div class="card-footer">
+      <small class="text-muted">Added {{instance.timestamp|timesince}} ago</small>
+    </div>
+  </div>

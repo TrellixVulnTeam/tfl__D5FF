@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-sm-4  mt-5">
+                <div class="card">
+                    {% if object.image %}
+                        <img class="card-img-top" style='width: auto; height: 200px;' src="{{object.image.url}}" alt="{{object.title}}">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{object.title}}</h5>
+                        <p class="card-text">{{object.description}}</p>
+                        <div class="text-center">
+                            <a href="" class="btn text-white bg-info mb-3">Go</a>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">Last updated 3 mins ago</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8  mt-5">
+                <div class="container">
+                    <row>
+                        <div class="col-sm-12">
+                            <p align="center">Article Details</p>
+                            <div class="table-responsive">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <p>Company:</p>
+                                        </td>
+                                        <td>
+                                            <p>Heineken</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p>Weight(kg):</p>
+                                        </td>
+                                        <td>
+                                            <p>9999</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p>Location(line-row-height):</p>
+                                        </td>
+                                        <td>
+                                            <p>123-147-951</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p>Dimension(height-width-depth):</p>
+                                        </td>
+                                        <td>
+                                            <p>50x32x44</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p>Total Number of Instances:</p>
+                                        </td>
+                                        <td>
+                                            <p>258</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p>Code:</p>
+                                        </td>
+                                        <td>
+                                            <p>FGSHYTNUYKYFTGKJHK</p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p>Category:</p>
+                                        </td>
+                                        <td>
+                                            <p class="article-font-opis article-tabela-col2">{{object.category}}</p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </row>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+{% endblock %}

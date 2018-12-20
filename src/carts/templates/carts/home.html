@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Cart</h1>
+
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Product Name</th>
+          <th scope="col">Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for product in cart.products.all %}
+        <tr>
+          <th scope="row">{{ forloop.counter }}</th>
+          <td>
+            <a href="{{product.get_absolute_url}}"> {{product.title}}</a>
+            <small>
+              <form method="POST" action="{% url 'carts:remove' %}" class="form"> {% csrf_token %}
+                <input type="hidden" name="product_id" value="{{ product.id }}" />
+                <button type="submit" class="btn btn-link btn-sm">Remove?</button>
+              </form>
+            </small>
+          </td>
+          <td>{{ product.price }}</td>
+        </tr>
+        {% endfor %}
+        <tr>
+          <td colspan="2"></td>
+          <td>Weight: {{ cart.total_weight }}</td>
+        </tr>
+        <tr>
+          <td colspan="2"></td>
+          <td>Total: {{ cart.total_price }}</td>
+        </tr>
+      </tbody>
+    </table>
+{% endblock %}

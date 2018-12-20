@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    {% include 'search/snippets/search-form.html' %}
+    <!--<div class="container">-->
+        <hr/>
+        <div class="card-deck">
+            <div class="row">
+                {% for obj in object_list %}
+                    <div class="col-sm-4 mb-5">
+                        {% include 'products/snippets/card.html' with instance=obj %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    <!--</div>-->
+{% endblock %}
