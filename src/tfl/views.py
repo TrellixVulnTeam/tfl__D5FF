@@ -8,18 +8,44 @@ def home_page(request):
     return render(request, 'home_page.html', {})
 
 
-def login_page(request):
-    form = LoginForm(request.POST or None)
-    context = {
-        "form": form
-    }
-    print("User login")
-    print(request.user.is_authenticated)
-    if form.is_valid():
-        print(form.cleaned_data)
+# def login_page(request):
+#     form = LoginForm(request.POST or None)
+#     context = {
+#         "form": form
+#     }
+#     print("User login")
+#     print(request.user.is_authenticated)
+#     if form.is_valid():
+#         print(form.cleaned_data)
+#
+#         username = form.cleaned_data.get("username")
+#         password = form.cleaned_data.get("password")
+#
+#         user = authenticate(request, username=username, password=password)
+#         print(request.user.is_authenticated)
+#         if user is not None:
+#             login(request, user)
+#             # Redirect to a success page.
+#             #context['form'] = LoginForm()
+#             return redirect("/")
+#         else:
+#             # Return an 'invalid login' error message.
+#             print("Error")
+#
+#     return render(request, "auth/login.html", context)
 
-        username = form.cleaned_data.get("username")
-        password = form.cleaned_data.get("password")
+def login_page(request):
+    # form = LoginForm(request.POST or None)
+    # context = {
+    #     "form": form
+    # }
+    # print("User login")
+    # print(request.user.is_authenticated)
+    # if form.is_valid():
+    #     print(form.cleaned_data)
+
+        username = request.POST.get("username")
+        password = request.POST.get("password")
 
         user = authenticate(request, username=username, password=password)
         print(request.user.is_authenticated)
@@ -32,7 +58,8 @@ def login_page(request):
             # Return an 'invalid login' error message.
             print("Error")
 
-    return render(request, "auth/login.html", context)
+        return redirect("/")
+        #return render(request, "auth/login.html", context)
 
 
 User = get_user_model()
