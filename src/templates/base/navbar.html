@@ -62,7 +62,8 @@
             <a class="nav-link" href="{{ login_url }}">Login</a>
           </li>
           <li class="nav-item ml-5 {% if request.path == login_url %}active{% endif %}">
-            <a class="nav-link" data-toggle="modal" data-target="#loginRegisterModal">Login/Register</a>
+            <!--<a class="nav-link" data-toggle="modal" data-target="#loginRegisterModal">Login/Register</a>   -->
+            <a class="nav-link" href="{{ login_url }}">Login/Register</a>
           </li>
           <li class="nav-item ml-5 {% if request.path == register_url %}active{% endif %}">
             <a class="nav-link" href="{{ register_url }}">Register</a>
@@ -75,7 +76,8 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="loginRegisterModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!--<div id="loginRegisterModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" {% if not form_error %} class="modal fade" aria-hidden="true" {% else %}class="modal fade show" style="display: block;"  {% endif %}>-->
+<div id="loginRegisterModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" class="modal fade" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -94,6 +96,7 @@
                 <div class="mb-2">
                   <input type="password" class="form-control" placeholder="Password" name="password"/>
                 </div>
+                <!--{{ form }}-->
                 <button type="submit" class="btn btn-default">Submit</button>
             </form>
           </div>
@@ -109,3 +112,9 @@
     </div>
   </div>
 </div>
+
+{% if form_error %}
+  <script>
+    $('#loginRegisterModal').modal('show');
+  </script>
+{% endif %}

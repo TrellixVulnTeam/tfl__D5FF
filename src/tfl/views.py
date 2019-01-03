@@ -47,19 +47,29 @@ def login_page(request):
         username = request.POST.get("username")
         password = request.POST.get("password")
 
+        form_error = True
+
+        context = {
+            'form_error': form_error
+        }
+
         user = authenticate(request, username=username, password=password)
         print(request.user.is_authenticated)
         if user is not None:
             login(request, user)
             # Redirect to a success page.
             #context['form'] = LoginForm()
+            form_error = False
+
             return redirect("/")
         else:
             # Return an 'invalid login' error message.
             print("Error")
+            context['form_error'] = form_error
+            return render(request, 'home_page.html', context)
 
-        return redirect("/")
-        #return render(request, "auth/login.html", context)
+
+        #return redirect("/")
 
 
 User = get_user_model()
