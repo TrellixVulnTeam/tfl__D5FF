@@ -5,8 +5,18 @@ User = get_user_model()
 
 
 class LoginForm(forms.Form):
-    username = forms.CharField()
-    password = forms.CharField(widget=forms.PasswordInput)
+    username = forms.CharField(widget=forms.TextInput(
+                                attrs={'class': 'form-control mb-1',
+                                       'id': 'inputUsername',
+                                       'placeholder': 'Username',
+                                       }
+                                ), label='')
+    password = forms.CharField(widget=forms.PasswordInput(
+                                attrs={'class': 'form-control mb-5',
+                                       'id': 'inputPassword',
+                                       'placeholder': 'Password',
+                                       }
+                                ), label='')
 
 
 class RegisterForm(forms.Form):
