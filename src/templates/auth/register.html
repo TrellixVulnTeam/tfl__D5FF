@@ -1,4 +1,15 @@
-<form method="post"> {% csrf_token %}
-    {{ form }}
-    <button type="submit" class="btn btn-default">Submit</button>
-</form>
+{% extends "base.html" %}
+{% load static %}
+
+{% block base_head %}
+    <link rel="stylesheet" href="{% static 'css/tfl.css' %}">
+{% endblock %}
+{% block content %}
+    <form class="form-signin text-center" method="POST" action="{{ register_url }}" > {% csrf_token %}
+      <img class="mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+      <h1 class="h3 mb-3 font-weight-normal">Please register</h1>
+      {{ form }}
+      <button class="btn btn-lg btn-dark btn-block" type="submit">Register</button>
+      <p class="mt-5 mb-3 text-muted">© 2018-2019</p>
+    </form>
+{% endblock %}

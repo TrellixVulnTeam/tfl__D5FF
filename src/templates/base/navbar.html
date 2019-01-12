@@ -63,7 +63,10 @@
           <!--</li>-->
           <li class="nav-item ml-5 {% if request.path == login_url %}active{% endif %}">
             <!--<a class="nav-link" data-toggle="modal" data-target="#loginRegisterModal">Login/Register</a>   -->
-            <a class="nav-link" href="{{ login_url }}">Login/Register</a>
+            <a class="nav-link" href="{{ login_url }}">Login</a>
+          </li>
+          <li class="nav-item {% if request.path == register_url %}active{% endif %}">
+            <a class="nav-link" href="{{ register_url }}">Register</a>
           </li>
           <!--<li class="nav-item ml-5 {% if request.path == register_url %}active{% endif %}">-->
             <!--<a class="nav-link" href="{{ register_url }}">Register</a>-->
@@ -73,48 +76,3 @@
       </div>
     </div>
 </nav>
-
-
-<!-- Modal -->
-<!--<div id="loginRegisterModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" {% if not form_error %} class="modal fade" aria-hidden="true" {% else %}class="modal fade show" style="display: block;"  {% endif %}>-->
-<div id="loginRegisterModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" class="modal fade" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-          <div class="col-md-6">
-            <form method="POST" action="{{ login_url }}" > {% csrf_token %}
-                <!--<div class="mb-2">-->
-                  <!--<input type="text" class="form-control" placeholder="Username" name="username" />-->
-                <!--</div>-->
-                <!--<div class="mb-2">-->
-                  <!--<input type="password" class="form-control" placeholder="Password" name="password"/>-->
-                <!--</div>-->
-                {{ form }}
-                <button type="submit" class="btn btn-default">Submit</button>
-            </form>
-          </div>
-          <div class="col-md-6">
-
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-{% if form_error %}
-  <script>
-    $('#loginRegisterModal').modal('show');
-  </script>
-{% endif %}
