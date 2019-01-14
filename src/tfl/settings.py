@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     #our apps
+    'accounts',
     'carts',
     'orders',
     'products',
@@ -46,6 +47,8 @@ INSTALLED_APPS = [
     'search',
     'tags',
 ]
+
+AUTH_USER_MODEL = 'accounts.User'  # Changes the built-in user model to ours
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
