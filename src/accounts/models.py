@@ -5,14 +5,17 @@ from django.contrib.auth.models import (
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, password=None, is_active=False, is_staff=False, is_admin=False):
+    def create_user(self, email, personal_name, password=None, is_active=False, is_staff=False, is_admin=False):
         if not email:
             raise ValueError('Users must have an email address')
         if not password:
             raise ValueError('Users mast have a password')
+        if not personal_name:
+            raise ValueError('Users mast have a personal name')
 
         user_obj = self.model(
-            email = self.normalize_email(email)
+            email = self.normalize_email(email),
+            personal_name = personal_name
         )
         user_obj.set_password(password)
         user_obj.staff = is_staff
@@ -22,9 +25,10 @@ class UserManager(BaseUserManager):
 
         return user_obj
 
-    def create_staffuser(self, email, password):
+    def create_staffuser(self, email, personal_name, password):
         user = self.create_user(
             email,
+            personal_name,
             password=password,
             is_staff=True,
             is_active=True
@@ -32,9 +36,10 @@ class UserManager(BaseUserManager):
 
         return user
 
-    def create_superuser(self, email, password):
+    def create_superuser(self, email, personal_name, password):
         user = self.create_user(
             email,
+            personal_name,
             password=password,
             is_staff=True,
             is_admin=True,
@@ -46,6 +51,7 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, unique=True)
+    personal_name = models.CharField(max_length=255, blank=True, null=True)
     active = models.BooleanField(default=False)
     staff = models.BooleanField(default=False)
     admin = models.BooleanField(default=False)
@@ -55,7 +61,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'email'
 
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['personal_name']
 
     def __str__(self):
         return self.email
