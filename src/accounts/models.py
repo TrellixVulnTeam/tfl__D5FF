@@ -5,18 +5,22 @@ from django.contrib.auth.models import (
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, personal_name, password=None, is_active=False, is_staff=False, is_admin=False):
+    def create_user(self, email, username, personal_name=None, address=None, phone=None, password=None, is_active=False, is_staff=False, is_admin=False):
         if not email:
             raise ValueError('Users must have an email address')
+        if not username:
+            raise ValueError('Users must have a username')
         if not password:
             raise ValueError('Users mast have a password')
-        if not personal_name:
-            raise ValueError('Users mast have a personal name')
 
         user_obj = self.model(
-            email = self.normalize_email(email),
-            personal_name = personal_name
+            email=self.normalize_email(email),
+            personal_name=personal_name,
+            username=username,
+            address=address,
+            phone=phone
         )
+
         user_obj.set_password(password)
         user_obj.staff = is_staff
         user_obj.admin = is_admin
@@ -25,10 +29,13 @@ class UserManager(BaseUserManager):
 
         return user_obj
 
-    def create_staffuser(self, email, personal_name, password):
+    def create_staffuser(self, email, username, personal_name, address, phone, password):
         user = self.create_user(
             email,
+            username,
             personal_name,
+            address,
+            phone,
             password=password,
             is_staff=True,
             is_active=True
@@ -36,10 +43,13 @@ class UserManager(BaseUserManager):
 
         return user
 
-    def create_superuser(self, email, personal_name, password):
+    def create_superuser(self, email, username, personal_name, address, phone, password):
         user = self.create_user(
             email,
+            username,
             personal_name,
+            address,
+            phone,
             password=password,
             is_staff=True,
             is_admin=True,
@@ -51,7 +61,10 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, unique=True)
+    username = models.CharField(max_length=255, unique=True)
     personal_name = models.CharField(max_length=255, blank=True, null=True)
+    address = models.CharField(max_length=255, blank=True, null=True)
+    phone = models.CharField(max_length=255, blank=True, null=True)
     active = models.BooleanField(default=False)
     staff = models.BooleanField(default=False)
     admin = models.BooleanField(default=False)
@@ -59,7 +72,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = 'username'
 
     REQUIRED_FIELDS = ['personal_name']
 
