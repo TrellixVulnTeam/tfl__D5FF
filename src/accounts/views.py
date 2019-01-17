@@ -1,42 +1,37 @@
 from django.contrib.auth import authenticate, login, get_user_model
-from django.shortcuts import render, redirect
+from django.views.generic import CreateView, FormView, DetailView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect
 
 from .forms import LoginForm, RegisterForm
 
 
-def login_page(request):
-    form = LoginForm(request.POST or None)
-    context = {
-        "form": form
-    }
+class AccountHomeView(LoginRequiredMixin, DetailView):
+    template_name = 'accounts/home.html'
 
-    if form.is_valid():
+    def get_object(self, queryset=None):
+        return self.request.user
+
+
+class LoginView(FormView):
+    form_class = LoginForm
+    template_name = 'accounts/login.html'
+    success_url = '/'
+
+    def form_valid(self, form):
+        request = self.request
         username = form.cleaned_data.get("username")
         password = form.cleaned_data.get("password")
 
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            form_error = False
-
-            context['form'] = LoginForm()
-
             return redirect("/")
-        else:
-            print("Error")
-
-    return render(request, 'accounts/login.html', context)
+        return super(LoginView, self).form_invalid(form)
 
 
-User = get_user_model()
+class RegisterView(CreateView):
+    form_class = RegisterForm
+    template_name = "accounts/register.html"
+    success_url = '/login/'
 
-
-def register_page(request):
-    form = RegisterForm(request.POST or None)
-    context = {
-        "form": form
-    }
-    if form.is_valid():
-        form.save()
-
-    return render(request, "accounts/register.html", context)
