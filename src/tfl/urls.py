@@ -27,6 +27,7 @@ from accounts.views import LoginView, RegisterView
 urlpatterns = [
     path('', home_page, name='home'),
     path('account/', include('accounts.urls', namespace='account')),
+    path('accounts/', include('accounts.passwords.urls')),
     path('cart/', include('carts.urls', namespace='cart')),
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
