@@ -18,7 +18,7 @@
           <td>
             <a href="{{product.get_absolute_url}}"> {{product.title}}</a>
             <small>
-              <form method="POST" action="{% url 'carts:remove' %}" class="form"> {% csrf_token %}
+              <form method="POST" action="{% url 'cart:remove' %}" class="form"> {% csrf_token %}
                 <input type="hidden" name="product_id" value="{{ product.id }}" />
                 <button type="submit" class="btn btn-link btn-sm">Remove?</button>
               </form>

@@ -7,7 +7,7 @@ from .views import (
         checkout_home
 )
 
-app_name = 'carts'
+app_name = 'cart'
 
 urlpatterns = [
     path('', cart_home, name='home'),
