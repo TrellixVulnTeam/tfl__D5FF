@@ -24,7 +24,7 @@ class UserManager(BaseUserManager):
         user_obj.set_password(password)
         user_obj.staff = is_staff
         user_obj.admin = is_admin
-        user_obj.active = is_active
+        user_obj.is_active = is_active
         user_obj.save(using=self._db)
 
         return user_obj
@@ -66,6 +66,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     address = models.CharField(max_length=255, blank=True, null=True)
     phone = models.CharField(max_length=255, blank=True, null=True)
     active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=False)
     staff = models.BooleanField(default=False)
     admin = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -93,7 +94,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     def is_admin(self):
         return self.admin
 
-    @property
-    def is_active(self):
-        return self.active
+    # @property
+    # def is_active(self):
+    #     return self.active
 
