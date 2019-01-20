@@ -1,7 +1,15 @@
+from django.conf import settings
 from django.db import models
+from django.db.models.signals import pre_save, post_save
+
 from django.contrib.auth.models import (
     AbstractBaseUser, BaseUserManager, PermissionsMixin
 )
+
+from django.core.mail import send_mail
+from django.template.loader import get_template
+
+from tfl.utils import unique_key_generator
 
 
 class UserManager(BaseUserManager):
@@ -65,7 +73,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     personal_name = models.CharField(max_length=255, blank=True, null=True)
     address = models.CharField(max_length=255, blank=True, null=True)
     phone = models.CharField(max_length=255, blank=True, null=True)
-    active = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
     staff = models.BooleanField(default=False)
     admin = models.BooleanField(default=False)
@@ -98,3 +105,68 @@ class User(AbstractBaseUser, PermissionsMixin):
     # def is_active(self):
     #     return self.active
 
+
+class EmailActivation(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    email = models.EmailField()
+    key = models.CharField(max_length=120, blank=True, null=True)
+    activated = models.BooleanField(default=False)
+    forced_expired = models.BooleanField(default=False)
+    expires = models.IntegerField(default=999)  # 999 days
+    timestamp = models.DateTimeField(auto_now_add=True)
+    update = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.email
+
+    def regenerate(self):
+        self.key = None
+        self.save()
+        if self.key is not None:
+            return True
+        return False
+
+    def send_activation(self):
+        if not self.activated and not self.forced_expired:
+            if self.key:
+                base_url = getattr(settings, 'BASE_URL', '127.0.0.1:8000')
+                key_path = self.key
+                path = '{base}{path}'.format(base=base_url, path=key_path)
+                context = {
+                    'path': path,
+                    'email': self.email
+                }
+                txt_ = get_template('registration/emails/verify.txt').render(context)
+                html_ = get_template('registration/emails/verify.html').render(context)
+                subject = 'Account Activate'
+                from_email = settings.EMAIL_HOST_USER
+                recipient_list = [from_email]
+
+                sent_mail = send_mail(
+                                subject,
+                                txt_,
+                                from_email,
+                                recipient_list,
+                                html_message=html_,
+                                fail_silently=False
+                            )
+                return sent_mail
+        return False
+
+
+def pre_save_email_activation(sender, instance, *args, **kwargs):
+    if not instance.activated and not instance.forced_expired:
+        if not instance.key:
+            instance.key = unique_key_generator(instance)
+
+
+pre_save.connect(pre_save_email_activation, sender=EmailActivation)
+
+
+def post_save_user_create_receiver(sender, instance, created, *args, **kwargs):
+    if created:
+        obj = EmailActivation.objects.create(user=instance, email=instance.email)
+        obj.send_activation()
+
+
+post_save.connect(post_save_user_create_receiver, sender=User)

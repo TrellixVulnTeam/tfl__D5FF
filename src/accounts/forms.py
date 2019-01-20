@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
+from .models import EmailActivation
 
 class LoginForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(
@@ -78,8 +79,7 @@ class RegisterForm(forms.ModelForm):
     def save(self, commit=True):
         user = super(RegisterForm, self).save(commit=False)
         user.set_password(self.cleaned_data['password'])
-        user.active = False
-
+        user.is_active = False  # send confirmation email via signals
         if commit:
             user.save()
         return user

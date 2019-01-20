@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login, get_user_model
 from django.views.generic import CreateView, FormView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 from django.shortcuts import redirect
 
 from .forms import LoginForm, RegisterForm
@@ -25,6 +26,9 @@ class LoginView(FormView):
 
         user = authenticate(request, username=username, password=password)
         if user is not None:
+            if not user.is_active:
+                messages.error(request, 'This user is inactive')
+                return super(LoginView, self).form_invalid(form)
             login(request, user)
             return redirect("/")
         return super(LoginView, self).form_invalid(form)
