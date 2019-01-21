@@ -1,10 +1,12 @@
-from django.contrib.auth import authenticate, login, get_user_model
-from django.views.generic import CreateView, FormView, DetailView
+from django.contrib.auth import authenticate, login
+from django.views.generic import CreateView, FormView, DetailView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
+from django.utils.safestring import mark_safe
 
 from .forms import LoginForm, RegisterForm
+from .models import UsernameActivation
 
 
 class AccountHomeView(LoginRequiredMixin, DetailView):
@@ -12,6 +14,24 @@ class AccountHomeView(LoginRequiredMixin, DetailView):
 
     def get_object(self, queryset=None):
         return self.request.user
+
+
+class AccountUsernameActivateView(View):
+    def get(self, request, key, *args, **kwargs):
+        qs = UsernameActivation.objects.filter(key__iexact=key)
+        confirm_qs = qs.confirmable()
+        if confirm_qs.count() == 1:
+            obj = qs.first()
+            obj.activate()
+            messages.success(request, 'Username has been confirmed')
+            return redirect('login')
+        else:
+            activated_qs = qs.filter(activated=True)
+            if activated_qs.exists():
+                msg = 'This username has alredy been confirmed'
+                messages.success(request, mark_safe(msg))
+                return redirect('login')
+        return render(request, 'registration/activation_error.html')
 
 
 class LoginView(FormView):

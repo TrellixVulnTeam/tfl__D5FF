@@ -1,13 +1,13 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 
-from .models import EmailActivation
+from .models import UsernameActivation
 
 User = get_user_model()
 
 
 class UserAdmin(admin.ModelAdmin):
-    search_fields = ['email']
+    search_fields = ['username']
 
     class Meta:
         model = User
@@ -16,13 +16,13 @@ class UserAdmin(admin.ModelAdmin):
 admin.site.register(User, UserAdmin)
 
 
-class EmailActivationAdmin(admin.ModelAdmin):
-    search_fields = ['email']
+class UsernameActivationAdmin(admin.ModelAdmin):
+    search_fields = ['username']
 
     class Meta:
-        model = EmailActivation
+        model = UsernameActivation
 
 
-admin.site.register(EmailActivation, EmailActivationAdmin)
+admin.site.register(UsernameActivation, UsernameActivationAdmin)
 
 

@@ -1,0 +1,5 @@
+Hello,
+
+Activate account for {{ username }} by clicking the link below:
+
+{{ path }}

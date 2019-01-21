@@ -3,7 +3,6 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-from .models import EmailActivation
 
 class LoginForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(

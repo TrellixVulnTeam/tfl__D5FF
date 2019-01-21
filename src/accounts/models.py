@@ -1,4 +1,6 @@
+from datetime import timedelta
 from django.conf import settings
+from django.urls import reverse
 from django.db import models
 from django.db.models.signals import pre_save, post_save
 
@@ -8,8 +10,11 @@ from django.contrib.auth.models import (
 
 from django.core.mail import send_mail
 from django.template.loader import get_template
+from django.utils import timezone
 
 from tfl.utils import unique_key_generator
+
+DEFAULT_ACTIVATION_DAYS = getattr(settings, 'DEFAULT_ACTIVATION_DAYS', 7)
 
 
 class UserManager(BaseUserManager):
@@ -106,18 +111,59 @@ class User(AbstractBaseUser, PermissionsMixin):
     #     return self.active
 
 
-class EmailActivation(models.Model):
+class UsernameActivationQuerySet(models.query.QuerySet):
+    def confirmable(self):
+        now = timezone.now()
+        start_range = now - timedelta(days=DEFAULT_ACTIVATION_DAYS)
+        end_range = now
+
+        return self.filter(
+            activated=False,
+            forced_expired=False).filter(
+            timestamp__gt=start_range,
+            timestamp__lte=end_range
+        )
+
+
+class UsernameActivationManager(models.Manager):
+    def get_queryset(self):
+        return UsernameActivationQuerySet(self.model, using=self._db)
+
+    def confirmable(self):
+        return self.get_queryset().confirmable()
+
+
+class UsernameActivation(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     email = models.EmailField()
+    username = models.CharField(max_length=255)
     key = models.CharField(max_length=120, blank=True, null=True)
     activated = models.BooleanField(default=False)
     forced_expired = models.BooleanField(default=False)
-    expires = models.IntegerField(default=999)  # 999 days
+    expires = models.IntegerField(default=7)  # 7 days
     timestamp = models.DateTimeField(auto_now_add=True)
     update = models.DateTimeField(auto_now=True)
 
+    objects = UsernameActivationManager()
+
     def __str__(self):
         return self.email
+
+    def can_activate(self):
+        qs = UsernameActivation.objects.filter(pk=self.pk).confirmable()
+        if qs.exists():
+            return True
+        return False
+
+    def activate(self):
+        if self.can_activate():
+            user = self.user
+            user.is_activate = True
+            user.save()
+            self.activated = True
+            self.save()
+            return True
+        return False
 
     def regenerate(self):
         self.key = None
@@ -130,14 +176,14 @@ class EmailActivation(models.Model):
         if not self.activated and not self.forced_expired:
             if self.key:
                 base_url = getattr(settings, 'BASE_URL', '127.0.0.1:8000')
-                key_path = self.key
+                key_path = reverse('account:username_activate', kwargs={'key': self.key})
                 path = '{base}{path}'.format(base=base_url, path=key_path)
                 context = {
                     'path': path,
-                    'email': self.email
+                    'username': self.username
                 }
-                txt_ = get_template('registration/emails/verify.txt').render(context)
-                html_ = get_template('registration/emails/verify.html').render(context)
+                txt_ = get_template('registration/usernames/verify.txt').render(context)
+                html_ = get_template('registration/usernames/verify.html').render(context)
                 subject = 'Account Activate'
                 from_email = settings.EMAIL_HOST_USER
                 recipient_list = [from_email]
@@ -160,12 +206,12 @@ def pre_save_email_activation(sender, instance, *args, **kwargs):
             instance.key = unique_key_generator(instance)
 
 
-pre_save.connect(pre_save_email_activation, sender=EmailActivation)
+pre_save.connect(pre_save_email_activation, sender=UsernameActivation)
 
 
 def post_save_user_create_receiver(sender, instance, created, *args, **kwargs):
     if created:
-        obj = EmailActivation.objects.create(user=instance, email=instance.email)
+        obj = UsernameActivation.objects.create(user=instance, username=instance.username)
         obj.send_activation()
 
 
