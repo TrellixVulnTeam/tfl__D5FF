@@ -147,7 +147,7 @@ class UsernameActivation(models.Model):
     objects = UsernameActivationManager()
 
     def __str__(self):
-        return self.email
+        return self.username
 
     def can_activate(self):
         qs = UsernameActivation.objects.filter(pk=self.pk).confirmable()
@@ -158,7 +158,7 @@ class UsernameActivation(models.Model):
     def activate(self):
         if self.can_activate():
             user = self.user
-            user.is_activate = True
+            user.is_active = True
             user.save()
             self.activated = True
             self.save()
@@ -211,7 +211,7 @@ pre_save.connect(pre_save_email_activation, sender=UsernameActivation)
 
 def post_save_user_create_receiver(sender, instance, created, *args, **kwargs):
     if created:
-        obj = UsernameActivation.objects.create(user=instance, username=instance.username)
+        obj = UsernameActivation.objects.create(user=instance, username=instance.username, email=instance.email)
         obj.send_activation()
 
 

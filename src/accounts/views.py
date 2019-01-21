@@ -23,7 +23,7 @@ class AccountUsernameActivateView(View):
         if confirm_qs.count() == 1:
             obj = qs.first()
             obj.activate()
-            messages.success(request, 'Username has been confirmed')
+            messages.success(request, 'Username has been confirmed!')
             return redirect('login')
         else:
             activated_qs = qs.filter(activated=True)
