@@ -28,6 +28,43 @@ class ReactivateUsernameForm(forms.Form):
         return username
 
 
+class UserDetailChangeForm(forms.ModelForm):
+    email = forms.EmailField(widget=forms.TextInput(
+                                attrs={'class': 'form-control mb-1',
+                                       'id': 'inputEmail',
+                                       'placeholder': 'Email',
+                                       }
+                                ), label='', disabled=True)
+    username = forms.CharField(widget=forms.TextInput(
+                                    attrs={'class': 'form-control mb-1',
+                                           'id': 'inputUsername',
+                                           'placeholder': 'Username',
+                                           }
+                                    ), label='', disabled=True)
+    personal_name = forms.CharField(widget=forms.TextInput(
+                                        attrs={'class': 'form-control mb-1',
+                                               'id': 'inputPersonalName',
+                                               'placeholder': 'Personal Name',
+                                               }
+                                        ), label='')
+    address = forms.CharField(widget=forms.TextInput(
+                                attrs={'class': 'form-control mb-1',
+                                       'id': 'inputAddress',
+                                       'placeholder': 'Address',
+                                       }
+                                ), label='')
+    phone = forms.CharField(widget=forms.TextInput(
+                                attrs={'class': 'form-control mb-1',
+                                       'id': 'inputPhone',
+                                       'placeholder': 'Phone number',
+                                       }
+                                ), label='')
+
+    class Meta:
+        model = User
+        fields = ('email', 'username', 'personal_name', 'address', 'phone',)
+
+
 class LoginForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(
                                 attrs={'class': 'form-control mb-1',

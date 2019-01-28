@@ -1,13 +1,14 @@
-from django.contrib.auth import authenticate, login
-from django.views.generic import CreateView, FormView, DetailView, View
+from django.urls import reverse
+from django.views.generic import CreateView, FormView, DetailView, View, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.utils.safestring import mark_safe
 from django.views.generic.edit import FormMixin
-from .forms import LoginForm, RegisterForm, ReactivateUsernameForm
+from .forms import LoginForm, RegisterForm, ReactivateUsernameForm, UserDetailChangeForm
 from .models import UsernameActivation
 from tfl.mixins import NextUrlMixin, RequestFormAttachMixin
+
 
 class AccountHomeView(LoginRequiredMixin, DetailView):
     template_name = 'accounts/home.html'
@@ -79,3 +80,14 @@ class RegisterView(CreateView):
     template_name = "accounts/register.html"
     success_url = '/login/'
 
+
+class UserDetailUpdateView(LoginRequiredMixin, UpdateView):
+    form_class = UserDetailChangeForm
+    template_name = 'accounts/detail_update_view.html'
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def get_success_url(self):
+        messages.success(self.request, 'Change successful!')
+        return reverse('account:home')
