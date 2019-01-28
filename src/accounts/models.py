@@ -2,6 +2,7 @@ from datetime import timedelta
 from django.conf import settings
 from django.urls import reverse
 from django.db import models
+from django.db.models import Q
 from django.db.models.signals import pre_save, post_save
 
 from django.contrib.auth.models import (
@@ -132,10 +133,18 @@ class UsernameActivationManager(models.Manager):
     def confirmable(self):
         return self.get_queryset().confirmable()
 
+    def username_exists(self, username):
+        return self.get_queryset().filter(
+            Q(username=username) |
+            Q(user__username=username)
+        ).filter(
+            activated=False
+        )
+
 
 class UsernameActivation(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    email = models.EmailField()
+    # email = models.EmailField()
     username = models.CharField(max_length=255)
     key = models.CharField(max_length=120, blank=True, null=True)
     activated = models.BooleanField(default=False)

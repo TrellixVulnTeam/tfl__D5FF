@@ -1,8 +1,23 @@
 {% extends "base.html" %}
+{% load static %}
+
+{% block base_head %}
+    <link rel="stylesheet" href="{% static 'css/tfl.css' %}">
+{% endblock %}
+
 {% block content %}
 <div class='row'>
     <div class="col-12 text-center py-5">
+        {% if key %}
             <h1 class='my-5 py-5'>Activation Error! Please try again</h1>
-      </div>
+        {% else %}
+            <h1 class='my-5 py-5'>Re-activation your account!</h1>
+        {% endif %}
+    </div>
+    <form class="form-signin text-center" method='post' action=''>{% csrf_token %}
+        <h1 class="h3 mb-3 font-weight-normal">Reset Activation</h1>
+        {{ form.as_p }}
+        <button type="submit" class='btn btn-block btn-dark'>Reset Activation</button>
+    </form>
 </div>
 {% endblock %}
