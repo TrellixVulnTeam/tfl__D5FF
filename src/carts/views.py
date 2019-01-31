@@ -2,12 +2,18 @@ from django.shortcuts import render, redirect
 
 from products.models import Product
 from .models import Cart
+from .forms import CartForm
 from orders.models import Order
 
 
 def cart_home(request):
+    form = CartForm()
     cart_obj, new_obj = Cart.objects.new_or_get(request)
-    return render(request, 'carts/home.html', {'cart': cart_obj})
+    context = {
+        'form': form,
+        'cart': cart_obj,
+    }
+    return render(request, 'carts/home.html', context)
 
 
 def cart_add(request):

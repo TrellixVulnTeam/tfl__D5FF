@@ -33,6 +33,15 @@ class CartManager(models.Manager):
 
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    manifestation = models.CharField(max_length=255, blank=False, null=True)
+    beginning = models.DateTimeField(null=True, blank=False)
+    ending = models.DateTimeField(null=True, blank=False)
+    delivery = models.DateTimeField(null=True, blank=False)
+    pickup = models.DateTimeField(null=True, blank=False)
+    email = models.EmailField(max_length=255, null=True)
+    personal_name = models.CharField(max_length=255, blank=False, null=True)
+    address = models.CharField(max_length=255, blank=False, null=True)
+    phone = models.CharField(max_length=255, blank=False, null=True)
     products = models.ManyToManyField(Product, blank=True)
     total_price = models.DecimalField(default=0.00, max_digits=100, decimal_places=2)
     total_weight = models.DecimalField(default=0.00, max_digits=100, decimal_places=2)

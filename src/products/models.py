@@ -62,6 +62,7 @@ class Product(models.Model):
     price = models.DecimalField(decimal_places=2, max_digits=20, default=0.00)
     weight = models.DecimalField(decimal_places=2, max_digits=20, default=0.00)
     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, null=True)
+    quantity = models.IntegerField(default=0, blank=False, null=False)
     image = models.ImageField(upload_to=upload_image_path, default='products/no-image.jpg')
     active = models.BooleanField(default=True)
     timestamp = models.DateTimeField(auto_now_add=True)
