@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'orders',
     'products',
     'products_categories',
+    'product_quantities',
     'search',
     'tags',
 ]

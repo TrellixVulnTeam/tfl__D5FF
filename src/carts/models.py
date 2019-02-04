@@ -67,4 +67,5 @@ def pre_save_cart_receiver(sender, instance, action, *args, **kwargs):
         instance.total_weight = total_weight
         instance.save()
 
+
 m2m_changed.connect(pre_save_cart_receiver, sender=Cart.products.through)

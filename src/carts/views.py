@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 
 from products.models import Product
+from product_quantities.models import ProductQuantity
 from .models import Cart
 from .forms import CartForm
 from orders.models import Order
@@ -26,6 +27,7 @@ def cart_add(request):
         cart_obj, new_obj = Cart.objects.new_or_get(request)
         if product_obj not in cart_obj.products.all():
             cart_obj.products.add(product_obj)
+            ProductQuantity.objects.new(cart_obj, product_obj)
         request.session['cart_items'] = cart_obj.products.count()
     return redirect('cart:home')
 
