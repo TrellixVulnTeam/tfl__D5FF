@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models import Q
 from django.db.models.signals import pre_save, post_save
 from django.urls import reverse
+from django.apps import apps
 
 from products_categories.models import ProductCategory
 from tfl.utils import unique_slug_generator
@@ -53,6 +54,11 @@ class ProductManager(models.Manager):
 
     def search(self, query):
         return self.get_queryset().active().search(query)
+
+    def get_choose_quantity(self, cart_obj):
+        product_quantity = apps.get_model('product_quantities', 'ProductQuantity')
+        quant_obj = product_quantity.get_queryset().get_product_quantity(cart_obj=cart_obj, product_obj=self)
+        return quant_obj.quantity
 
 
 class Product(models.Model):

@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.db.models.signals import pre_save, post_save, m2m_changed
+from django.apps import apps
 
 from products.models import Product
 
@@ -56,10 +57,12 @@ class Cart(models.Model):
 
 def pre_save_cart_receiver(sender, instance, action, *args, **kwargs):
     if action == 'post_add' or action == 'post_remove' or action == 'post_clear':
+        #product_quantity = apps.get_model('product_quantities', 'ProductQuantity')
         products = instance.products.all()
         total_price = 0
         total_weight = 0
         for p in products:
+            # quant_obj = product_quantity.objects.get_queryset().get_product_quantity(instance, p)
             total_price += p.price
             total_weight += p.weight
 

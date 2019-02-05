@@ -28,8 +28,6 @@ def cart_add(request):
         if product_obj not in cart_obj.products.all():
             cart_obj.products.add(product_obj)
             ProductQuantity.objects.new(cart_obj, product_obj)
-        quant_obj = ProductQuantity.objects.get_queryset().exist(cart_obj, product_obj)
-        print(quant_obj.quantity)
         request.session['cart_items'] = cart_obj.products.count()
     return redirect('cart:home')
 

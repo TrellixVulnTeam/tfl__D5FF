@@ -6,7 +6,7 @@ from products.models import Product
 
 
 class ProductQuantityQuerySet(models.query.QuerySet):
-    def exist(self, cart_obj, product_obj):
+    def get_product_quantity(self, cart_obj, product_obj):
         lookups = (Q(cart=cart_obj) &
                    Q(product=product_obj))
         return self.filter(lookups).first()
@@ -17,8 +17,12 @@ class ProductQuantityManager(models.Manager):
         return ProductQuantityQuerySet(self.model, using=self._db)
 
     def new(self, cart_obj, product_obj):
-        if (self.get_queryset().exist(cart_obj, product_obj)) is None:
+        product_quantity = self.get_queryset().get_product_quantity(cart_obj, product_obj)
+        if product_quantity is None:
             self.model.objects.create(cart=cart_obj, product=product_obj)
+        else:
+            product_quantity.quantity = 1
+            product_quantity.save()
 
 
 class ProductQuantity(models.Model):
