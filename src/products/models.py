@@ -4,9 +4,7 @@ from django.db import models
 from django.db.models import Q
 from django.db.models.signals import pre_save, post_save
 from django.urls import reverse
-from django.apps import apps
 
-from products_categories.models import ProductCategory
 from tfl.utils import unique_slug_generator
 
 
@@ -24,6 +22,13 @@ def upload_image_path(instance, filename):
         new_filename=new_filename,
         final_name=final_name
     )
+
+
+class ProductCategory(models.Model):
+    name = models.CharField(max_length=256)
+
+    def __str__(self):
+        return self.name
 
 
 class ProductQuerySet(models.query.QuerySet):
@@ -55,11 +60,6 @@ class ProductManager(models.Manager):
     def search(self, query):
         return self.get_queryset().active().search(query)
 
-    def get_choose_quantity(self, cart_obj):
-        product_quantity = apps.get_model('product_quantities', 'ProductQuantity')
-        quant_obj = product_quantity.get_queryset().get_product_quantity(cart_obj=cart_obj, product_obj=self)
-        return quant_obj.quantity
-
 
 class Product(models.Model):
     title = models.CharField(max_length=120)
@@ -88,3 +88,24 @@ def product_pre_save_receiver(sender, instance, *args, **kwargs):
 
 
 pre_save.connect(product_pre_save_receiver, sender=Product)
+
+
+class CartProductManager(models.Manager):
+    def new(self, product):
+        product_obj = product
+        return self.model.objects.create(product=product_obj)
+
+
+class CartProduct(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
+    updated = models.DateTimeField(auto_now=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    objects = CartProductManager()
+
+    def __str__(self):
+        return str(self.id)
+
+    # class Meta:
+    #     unique_together = (('cart', 'product'),)

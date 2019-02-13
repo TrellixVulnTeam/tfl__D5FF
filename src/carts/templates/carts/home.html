@@ -17,20 +17,20 @@
             </tr>
           </thead>
           <tbody>
-            {% for product in cart.products.all %}
+            {% for p in cart.products.all %}
             <tr>
               <th scope="row">{{ forloop.counter }}</th>
               <td>
-                <a href="{{product.get_absolute_url}}"> {{product.title}}</a>
+                <a href="{{p.product.get_absolute_url}}"> {{p.product.title}}</a>
                 <small>
                   <form method="POST" action="{% url 'cart:remove' %}" class="form"> {% csrf_token %}
-                    <input type="hidden" name="product_id" value="{{ product.id }}" />
+                    <input type="hidden" name="product_id" value="{{ p.product.id }}" />
                     <button type="submit" class="btn btn-link btn-sm">Remove?</button>
                   </form>
                 </small>
               </td>
-              <td>1</td>
-              <td>{{ product.price }}</td>
+              <td>{{ p.quantity }}</td>
+              <td>{{ p.product.price }}</td>
             </tr>
             {% endfor %}
             <tr>

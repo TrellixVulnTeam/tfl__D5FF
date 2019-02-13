@@ -19,7 +19,7 @@ DEFAULT_ACTIVATION_DAYS = getattr(settings, 'DEFAULT_ACTIVATION_DAYS', 7)
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, username, personal_name=None, address=None, phone=None, password=None, is_active=False, is_staff=False, is_admin=False):
+    def create_user(self, username, email, personal_name=None, address=None, phone=None, password=None, is_active=False, is_staff=False, is_admin=False):
         if not email:
             raise ValueError('Users must have an email address')
         if not username:
@@ -43,10 +43,10 @@ class UserManager(BaseUserManager):
 
         return user_obj
 
-    def create_staffuser(self, email, username, personal_name, address, phone, password):
+    def create_staffuser(self, username, email, personal_name, address, phone, password):
         user = self.create_user(
-            email,
             username,
+            email,
             personal_name,
             address,
             phone,
@@ -57,10 +57,10 @@ class UserManager(BaseUserManager):
 
         return user
 
-    def create_superuser(self, email, username, personal_name, address, phone, password):
+    def create_superuser(self, username, email, personal_name, address, phone, password):
         user = self.create_user(
-            email,
             username,
+            email,
             personal_name,
             address,
             phone,
@@ -88,7 +88,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'username'
 
-    REQUIRED_FIELDS = ['personal_name']
+    REQUIRED_FIELDS = ['personal_name', 'email', 'address', 'phone']
 
     def __str__(self):
         return self.email
@@ -220,7 +220,7 @@ pre_save.connect(pre_save_email_activation, sender=UsernameActivation)
 
 def post_save_user_create_receiver(sender, instance, created, *args, **kwargs):
     if created:
-        obj = UsernameActivation.objects.create(user=instance, username=instance.username, email=instance.email)
+        obj = UsernameActivation.objects.create(user=instance, username=instance.username)
         obj.send_activation()
 
 
