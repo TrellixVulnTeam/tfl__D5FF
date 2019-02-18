@@ -1,4 +1,7 @@
+import datetime
+
 from django import forms
+from tempus_dominus.widgets import DateTimePicker
 
 from .models import Cart
 
@@ -16,28 +19,64 @@ class CartForm(forms.ModelForm):
                'placeholder': 'Address',
                }
     ), label='')
-    beginning = forms.CharField(widget=forms.DateTimeInput(
-        attrs={'class': 'form-control mb-1',
+    beginning = forms.CharField(widget=DateTimePicker(
+        options={
+            'minDate': (datetime.date.today() + datetime.timedelta(days=1)).strftime('%Y-%m-%d'),  # Tomorrow
+            'useCurrent': False,
+            'collapse': False,
+            'format': 'DD/MM/YYYY HH:mm:ss'
+        },
+        attrs={'class': 'form-control',
                'id': 'inputBiginning',
                'placeholder': 'Beginning Date',
+               'append': 'fa fa-calendar',
+               'input_toggle': True,
+               'icon_toggle': True,
                }
     ), label='')
-    ending = forms.CharField(widget=forms.DateTimeInput(
-        attrs={'class': 'form-control mb-1',
+    ending = forms.CharField(widget=DateTimePicker(
+        options={
+            'minDate': (datetime.date.today() + datetime.timedelta(days=1)).strftime('%Y-%m-%d'),  # Tomorrow
+            'useCurrent': False,
+            'collapse': False,
+            'format': 'DD/MM/YYYY HH:mm:ss'
+        },
+        attrs={'class': 'form-control',
                'id': 'inputEnding',
                'placeholder': 'Ending Date',
+               'append': 'fa fa-calendar',
+               'input_toggle': True,
+               'icon_toggle': True,
                }
     ), label='')
-    delivery = forms.CharField(widget=forms.DateTimeInput(
-        attrs={'class': 'form-control mb-1',
+    delivery = forms.CharField(widget=DateTimePicker(
+        options={
+            'minDate': (datetime.date.today() + datetime.timedelta(days=1)).strftime('%Y-%m-%d'),  # Tomorrow
+            'useCurrent': False,
+            'collapse': False,
+            'format': 'DD/MM/YYYY HH:mm:ss'
+        },
+        attrs={'class': 'form-control',
                'id': 'inputDelivery',
                'placeholder': 'Delivery Date',
+               'append': 'fa fa-calendar',
+               'input_toggle': True,
+               'icon_toggle': True,
                }
     ), label='')
-    pickup = forms.CharField(widget=forms.DateTimeInput(
-        attrs={'class': 'form-control mb-1',
+    pickup = forms.CharField(widget=DateTimePicker(
+        options={
+            'minDate': (datetime.date.today() + datetime.timedelta(days=1)).strftime('%Y-%m-%d'),  # Tomorrow
+            'useCurrent': False,
+            'collapse': False,
+            'format': 'DD/MM/YYYY HH:mm:ss'
+        },
+        attrs={'class': 'form-control',
                'id': 'inputPickup',
                'placeholder': 'Pickup Date',
+               'append': 'fa fa-calendar',
+               'input_toggle': True,
+               'icon_toggle': True,
                }
     ), label='')
     personal_name = forms.CharField(widget=forms.TextInput(

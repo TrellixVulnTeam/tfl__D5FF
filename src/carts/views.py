@@ -43,8 +43,9 @@ def cart_remove(request):
         except Product.DoesNotExist:
             return redirect('cart:home')
         cart_obj, new_obj = Cart.objects.new_or_get(request)
-        if product_obj in cart_obj.products.all():
-            cart_obj.products.remove(product_obj)
+        for p in cart_obj.products.all():
+            if p.product == product_obj:
+                cart_obj.products.remove(p)
         request.session['cart_items'] = cart_obj.products.count()
     return redirect('cart:home')
 

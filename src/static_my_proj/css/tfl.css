@@ -4,3 +4,17 @@
     padding: 15px;
     margin: 0 auto;
 }
+
+td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+th {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.input-group {
+    margin-bottom: .25rem
+}

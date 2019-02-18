@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'products',
     'search',
     'tags',
+    'tempus_dominus',  # datetime picker
 ]
 
 AUTH_USER_MODEL = 'accounts.User'  # Changes the built-in user model to ours
