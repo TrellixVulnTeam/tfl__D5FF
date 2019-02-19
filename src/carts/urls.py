@@ -1,17 +1,21 @@
 from django.urls import path
 
 from .views import (
-        cart_home,
+        CartView,
+        CartRemoveView,
+        # cart_home,
         cart_add,
-        cart_remove,
+        # cart_remove,
         checkout_home
 )
 
 app_name = 'cart'
 
 urlpatterns = [
-    path('', cart_home, name='home'),
+    # path('', cart_home, name='home'),
+    path('', CartView.as_view(), name='home'),
     path('add/', cart_add, name='add'),
     path('checkout/', checkout_home, name='checkout'),
-    path('remove/', cart_remove, name='remove'),
+    path('remove/', CartRemoveView.as_view(), name='remove'),
+    # path('remove/', cart_remove, name='remove'),
 ]
