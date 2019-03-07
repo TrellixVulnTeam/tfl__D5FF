@@ -25,7 +25,7 @@ from accounts.views import LoginView, RegisterView
 
 
 urlpatterns = [
-    path('', home_page, name='home'),
+    path('', include('posts.urls', namespace='post')),
     path('account/', include('accounts.urls', namespace='account')),
     path('accounts/', include('accounts.passwords.urls')),
     path('cart/', include('carts.urls', namespace='cart')),

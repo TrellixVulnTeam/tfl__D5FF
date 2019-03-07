@@ -1,16 +1,15 @@
 from django.views.generic import ListView, DetailView
 from django.http import Http404
-from django.shortcuts import render
 
 from .models import Product
 
 
 class ProductListView(ListView):
-    #queryset = Product.objects.all()
+    # queryset = Product.objects.all()
     template_name = "products/list.html"
 
     def get_queryset(self, *args, **kwargs):
-        request = self.request
+        # request = self.request
         return Product.objects.all()
 
     # def get_context_data(self, *args, **kwargs):
@@ -52,10 +51,10 @@ class ProductDetailView(DetailView):
     def get_object(self, *args, **kwargs):
         request = self.request
         slug = self.kwargs.get('slug')
-        #instance = Product.objects.get_by_id(slug)
-        #if instance is None:
+        # instance = Product.objects.get_by_id(slug)
+        # if instance is None:
         #    raise Http404("Product doesn't exist!")
-        #return instance
+        # return instance
         try:
             instance = Product.objects.get(slug=slug, active=True)
         except Product.DoesNotExist:

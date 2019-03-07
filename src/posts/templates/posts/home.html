@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    <form enctype="multipart/form-data" class="text-center" method="POST" action="{% url 'post:add' %}"> {% csrf_token %}
+        <div class="row">
+            <div class="col-sm-2 mt-5"></div>
+            <div class="col-sm-8 mt-5">
+                {{ form.as_p }}
+            </div>
+            <div class="col-sm-2 mt-5"></div>
+        </div>
+        <div class="row">
+            <div class="col-sm-2 mt-1"></div>
+            <div class="col-sm-2 mt-1">
+                <button class="btn btn-lg btn-dark btn-block" type="submit">Add <i class="fas fa-plus"></i></button>
+            </div>
+
+        </div>
+    </form>
+    <div class="card-deck">
+        <div class="row">
+            {% for obj in object_list %}
+                <div class="col-sm-2 mt-5"></div>
+                <div class="col-sm-8 mt-5">
+                    {% include 'posts/snippets/card.html' with instance=obj %}
+                </div>
+                <div class="col-sm-2 mt-5"></div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
