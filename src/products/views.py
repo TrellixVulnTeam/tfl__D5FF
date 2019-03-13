@@ -1,7 +1,9 @@
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView
 from django.http import Http404
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Product
+from .forms import ProductForm
 
 
 class ProductListView(ListView):
@@ -65,3 +67,10 @@ class ProductDetailView(DetailView):
         except:
             raise Http404("Uhhh")
         return instance
+
+
+class ProductAddView(LoginRequiredMixin, CreateView):
+    form_class = ProductForm
+    template_name = 'products/add.html'
+    model = Product
+    

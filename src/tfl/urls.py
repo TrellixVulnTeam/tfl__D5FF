@@ -22,12 +22,14 @@ from django.urls import path, include
 
 from .views import home_page
 from accounts.views import LoginView, RegisterView
+from products.views import ProductAddView
 
 
 urlpatterns = [
     path('', include('posts.urls', namespace='post')),
     path('account/', include('accounts.urls', namespace='account')),
     path('accounts/', include('accounts.passwords.urls')),
+    path('add_product/', ProductAddView.as_view(), name='add_product'),
     path('cart/', include('carts.urls', namespace='cart')),
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),

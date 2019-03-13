@@ -3,7 +3,7 @@
 
 {% block content %}
     {% if request.user.staff %}
-        <form enctype="multipart/form-data" class="text-center" method="POST" action="{% url 'post:add' %}"> {% csrf_token %}
+        <form enctype="multipart/form-data" class="text-center" method="POST"> {% csrf_token %}
             <div class="row">
                 <div class="col-sm-2 mt-5"></div>
                 <div class="col-sm-8 mt-5">
@@ -19,16 +19,14 @@
 
             </div>
         </form>
+        <!-- Dodaje klase na padajuce liste -->
+        <script>
+            $(document).ready(function () {
+                $('#id_company').attr('class', 'form-control mb-1')
+            });
+            $(document).ready(function () {
+                $('#id_category').attr('class', 'form-control mb-1')
+            });
+        </script>
     {% endif %}
-    <div class="card-deck">
-        <div class="row">
-            {% for obj in object_list %}
-                <div class="col-sm-2 mt-5"></div>
-                <div class="col-sm-8 mt-5">
-                    {% include 'posts/snippets/card.html' with instance=obj %}
-                </div>
-                <div class="col-sm-2 mt-5"></div>
-            {% endfor %}
-        </div>
-    </div>
 {% endblock %}
