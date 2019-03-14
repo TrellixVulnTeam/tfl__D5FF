@@ -3,12 +3,12 @@
 
 {% block content %}
     {% if query %}
-        {% include 'search/snippets/search-form.html' %}
+        {% include 'search/snippets/search-form.html' with category_list=all_categories %}
         <div class="mt-5">
             Results for <b>{{ query }}</b>
         </div>
     {% else %}
-        {% include 'search/snippets/search-form.html' %}
+        {% include 'search/snippets/search-form.html' with category_list=all_categories %}
     {% endif %}
         <hr/>
         <div class="card-deck">

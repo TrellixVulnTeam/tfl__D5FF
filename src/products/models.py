@@ -57,15 +57,27 @@ class ProductCategory(models.Model):
 
 class ProductQuerySet(models.query.QuerySet):
     def active(self):
-        return self.filter(active=True)
+        return self.filter(active=True).order_by('-timestamp')
 
-    def search(self, query):
+    def search_cq(self, category, query):
+        lookups = ((Q(title__icontains=query) |
+                   Q(description__icontains=query) |
+                   Q(price__icontains=query) |
+                   Q(tag__title__icontains=query)) &
+                   Q(category=category)
+                   )
+        return self.filter(lookups).order_by('-timestamp').distinct()
+
+    def search_c(self, category):
+        return self.filter(Q(category=category)).order_by('-timestamp')
+
+    def search_q(self, query):
         lookups = (Q(title__icontains=query) |
                    Q(description__icontains=query) |
                    Q(price__icontains=query) |
                    Q(tag__title__icontains=query)
                    )
-        return self.filter(lookups).distinct()
+        return self.filter(lookups).order_by('-timestamp').distinct()
 
 
 class ProductManager(models.Manager):
@@ -81,8 +93,14 @@ class ProductManager(models.Manager):
             return qs.first()
         return None
 
-    def search(self, query):
-        return self.get_queryset().active().search(query)
+    def search(self, category, query):
+        print(query)
+        if category and query:
+            return self.get_queryset().active().search_cq(category, query)
+        elif category:
+            return self.get_queryset().active().search_c(category)
+        else:
+            return self.get_queryset().active().search_q(query)
 
 
 class Product(models.Model):

@@ -25,7 +25,7 @@
                 <div class="container">
                     <row>
                         <div class="col-sm-12">
-                            <p align="center">Article Details</p>
+                            <p align="center">Product Details</p>
                             <div class="table-responsive">
                                 <table>
                                     <tr>
@@ -33,7 +33,7 @@
                                             <p>Company:</p>
                                         </td>
                                         <td>
-                                            <p>Heineken</p>
+                                            <p>{{object.company}}</p>
                                         </td>
                                     </tr>
                                     <tr>
@@ -41,7 +41,7 @@
                                             <p>Weight(kg):</p>
                                         </td>
                                         <td>
-                                            <p>9999</p>
+                                            <p>{{object.weight}}</p>
                                         </td>
                                     </tr>
                                     <tr>
@@ -49,23 +49,23 @@
                                             <p>Location(line-row-height):</p>
                                         </td>
                                         <td>
-                                            <p>123-147-951</p>
+                                            <p>{{object.location}}</p>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>
-                                            <p>Dimension(height-width-depth):</p>
-                                        </td>
-                                        <td>
-                                            <p>50x32x44</p>
-                                        </td>
-                                    </tr>
+                                    <!--<tr>-->
+                                        <!--<td>-->
+                                            <!--<p>Dimension(height-width-depth):</p>-->
+                                        <!--</td>-->
+                                        <!--<td>-->
+                                            <!--<p>50x32x44</p>-->
+                                        <!--</td>-->
+                                    <!--</tr>-->
                                     <tr>
                                         <td>
                                             <p>Total Number of Instances:</p>
                                         </td>
                                         <td>
-                                            <p>258</p>
+                                            <p>{{object.quantity}}</p>
                                         </td>
                                     </tr>
                                     <tr>

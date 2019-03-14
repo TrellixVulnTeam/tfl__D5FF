@@ -2,7 +2,7 @@ from django.views.generic import ListView, DetailView, CreateView
 from django.http import Http404
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import Product
+from .models import Product, ProductCategory
 from .forms import ProductForm
 
 
@@ -14,10 +14,11 @@ class ProductListView(ListView):
         # request = self.request
         return Product.objects.all()
 
-    # def get_context_data(self, *args, **kwargs):
-    #     context = super(ProductListView, self).get_context_data(*args, **kwargs)
-    #     print(context)
-    #     return context
+    def get_context_data(self, *args, **kwargs):
+        context = super(ProductListView, self).get_context_data(*args, **kwargs)
+        all_categories = ProductCategory.objects.all()
+        context['all_categories'] = all_categories
+        return context
 
 # def product_list_view(request):
 #     queryset = Product.objects.all()
@@ -72,5 +73,5 @@ class ProductDetailView(DetailView):
 class ProductAddView(LoginRequiredMixin, CreateView):
     form_class = ProductForm
     template_name = 'products/add.html'
+
     model = Product
-    

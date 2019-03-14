@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-    {% include 'search/snippets/search-form.html' %}
+    {% include 'search/snippets/search-form.html' with category_list=all_categories %}
     <!--<div class="container">-->
         <hr/>
         <div class="card-deck">
