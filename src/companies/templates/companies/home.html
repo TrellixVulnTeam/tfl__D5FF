@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block base_head %}
+    <link rel="stylesheet" href="{% static 'css/tfl.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h1 class="mb-3">
+      <i class="fas fa-building"></i>
+    </h1>
+    <div class="row">
+      <div class="col-md-12">
+          <div class="table-responsive-sm">
+            <table class="table table-sm">
+              <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Active</th>
+                    <th scope="col">Add</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for obj in object_list %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ obj.name }}</td>
+                    <td>
+                        {% if obj.active%}
+                            <i class="fas fa-check-circle"></i>
+                        {% else %}
+                            <i class="fas fa-times-circle"></i>
+                        {% endif %}
+                    </td>
+                  <td>{{ obj.timestamp }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+      </div>
+    </div>
+{% endblock %}

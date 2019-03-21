@@ -1,5 +1,7 @@
 {% url 'post:home' as home_url %}
 {% url 'account:all' as all_users_url %}
+{% url 'companies:home' as companies_url %}
+{% url 'companies:add' as add_company_url %}
 {% url 'add_product' as add_product_url %}
 {% url 'login' as login_url %}
 {% url 'logout' as logout_url %}
@@ -56,7 +58,8 @@
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
               <a class="dropdown-item" href="{{ add_product_url }}">Add Product</a>
-              <a class="dropdown-item" href="#">Add Company</a>
+              <a class="dropdown-item" href="{{ companies_url }}">Companies</a>
+              <a class="dropdown-item" href="{{ add_company_url }}">Add Company</a>
               <a class="dropdown-item" href="{{ all_users_url }}">Users</a>
             </div>
           </li>

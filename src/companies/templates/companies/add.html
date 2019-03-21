@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    {% if request.user.staff %}
+        <form class="text-center" method="POST"> {% csrf_token %}
+            <div class="row">
+                <div class="col-sm-2 mt-5"></div>
+                <div class="col-sm-8 mt-5">
+                    {{ form }}
+                </div>
+                <div class="col-sm-2 mt-5"></div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2 mt-1"></div>
+                <div class="col-sm-2 mt-1">
+                    <button class="btn btn-lg btn-dark btn-block" type="submit">Save <i class="fas fa-save"></i></button>
+                </div>
+
+            </div>
+        </form>
+    {% endif %}
+{% endblock %}
