@@ -2,6 +2,7 @@ from django.urls import reverse
 from django.shortcuts import render, redirect
 from django.views.generic import UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 
 from products.models import Product, CartProduct
 from .models import Cart
@@ -96,6 +97,8 @@ def checkout_home(request):
     cart_obj, cart_created = Cart.objects.new_or_get(request)
     order_obj = None
     if cart_created or cart_obj.products.count() == 0:
+        msg = 'Cart is empty!'
+        messages.warning(request, msg)
         return redirect('cart:home')
     else:
         order_obj, new_order_obj = Order.objects.get_or_create(cart=cart_obj)

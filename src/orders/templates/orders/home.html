@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block base_head %}
+    <link rel="stylesheet" href="{% static 'css/tfl.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h1 class="mb-3">
+      <i class="fas fa-dolly-flatbed"></i>
+    </h1>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="table-responsive-sm">
+            <table class="table table-sm">
+                <thead class="thead-dark">
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Manifestation</th>
+                      <th scope="col">Delivery - Pickup</th>
+                      <th scope="col">Status</th>
+                      <th scope="col">Username</th>
+                      <th scope="col">Created</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                      <th scope="row">1</th>
+                      <td>Mark</td>
+                      <td>Otto</td>
+                      <td>14</td>
+                      <td>@mdo</td>
+                      <td>@mdo</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">2</th>
+                      <td>Jacob</td>
+                      <td>Thornton</td>
+                      <td>14</td>
+                      <td>@fat</td>
+                      <td>@mdo</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">3</th>
+                      <td>Larry</td>
+                      <td>the Bird</td>
+                      <td>14</td>
+                      <td>@twitter</td>
+                      <td>@mdo</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+      </div>
+    </div>
+{% endblock %}

@@ -15,49 +15,51 @@
         {{ form }}
       </div>
       <div class="col-md-8">
-        <table class="table">
-          <thead class="thead-dark">
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Product Name</th>
-              <th scope="col">Quantity</th>
-              <th scope="col">Price</th>
-              <th scope="col">Remove</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for p in cart.products.all %}
-            <tr>
-              <th scope="row">{{ forloop.counter }}</th>
-              <td>
-                <a href="{{p.product.get_absolute_url}}"> {{p.product.title}}</a>
-              </td>
-              <td>
-                <input class="form-control" type="number" value="{{ p.quantity }}" id="quantity-input">
-              </td>
-              <td>{{ p.product.price }}</td>
-              <td>
-                <form method="POST" action="{% url 'cart:remove' %}" class="form" style="justify-content: center; display: flex;"> {% csrf_token %}
-                  <input type="hidden" name="product_id" value="{{ p.product.id }}" />
-                  <button type="submit" style="border: None; background: None"><i class="fas fa-trash-alt"></i></button>
-                </form>
-              </td>
-            </tr>
-            {% endfor %}
-            <tr>
-              <td colspan="4"></td>
-              <td>Weight: {{ cart.total_weight }}</td>
-            </tr>
-            <tr>
-              <td colspan="4"></td>
-              <td>Total: {{ cart.total_price }}</td>
-            </tr>
-            <tr>
-              <td colspan="4"></td>
-              <td><a class="btn btn-lg btn-success" href="{% url 'cart:checkout' %}">Checkout</a></td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="table-responsive-sm">
+          <table class="table table-sm">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Product Name</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Price</th>
+                <th scope="col">Remove</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for p in cart.products.all %}
+              <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>
+                  <a href="{{p.product.get_absolute_url}}"> {{p.product.title}}</a>
+                </td>
+                <td>
+                  <input class="form-control" type="number" value="{{ p.quantity }}" id="quantity-input">
+                </td>
+                <td>{{ p.product.price }}</td>
+                <td>
+                  <form method="POST" action="{% url 'cart:remove' %}" class="form" style="justify-content: center; display: flex;"> {% csrf_token %}
+                    <input type="hidden" name="product_id" value="{{ p.product.id }}" />
+                    <button type="submit" style="border: None; background: None"><i class="fas fa-trash-alt"></i></button>
+                  </form>
+                </td>
+              </tr>
+              {% endfor %}
+              <tr>
+                <td colspan="4"></td>
+                <td>Weight: {{ cart.total_weight }}</td>
+              </tr>
+              <tr>
+                <td colspan="4"></td>
+                <td>Total: {{ cart.total_price }}</td>
+              </tr>
+              <tr>
+                <td colspan="4"></td>
+                <td><a class="btn btn-lg btn-success" href="{% url 'cart:checkout' %}">Checkout</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 {% endblock %}

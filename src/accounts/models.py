@@ -18,7 +18,15 @@ from tfl.utils import unique_key_generator
 DEFAULT_ACTIVATION_DAYS = getattr(settings, 'DEFAULT_ACTIVATION_DAYS', 7)
 
 
+class UserQuerySet(models.query.QuerySet):
+    def staff(self):
+        return self.filter(staff=True)
+
+
 class UserManager(BaseUserManager):
+    def get_queryset(self):
+        return UserQuerySet(self.model, using=self._db)
+
     def create_user(self, username, email, personal_name=None, address=None, phone=None, password=None, is_active=False, is_staff=False, is_admin=False):
         if not email:
             raise ValueError('Users must have an email address')
@@ -71,6 +79,9 @@ class UserManager(BaseUserManager):
         )
 
         return user
+
+    def all_staff(self):  # trenutno se nigdje ne koristi
+        return self.get_queryset().staff()
 
 
 class User(AbstractBaseUser, PermissionsMixin):

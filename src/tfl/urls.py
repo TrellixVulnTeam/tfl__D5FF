@@ -33,6 +33,7 @@ urlpatterns = [
     path('cart/', include('carts.urls', namespace='cart')),
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
+    path('orders/', include('orders.urls', namespace='orders')),
     path('register/', RegisterView.as_view(), name='register'),
     path('products/', include('products.urls', namespace='products')),
     path('search/', include('search.urls', namespace='search')),
