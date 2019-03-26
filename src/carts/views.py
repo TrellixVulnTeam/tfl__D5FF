@@ -99,7 +99,27 @@ def checkout_home(request):
     if cart_created or cart_obj.products.count() == 0:
         msg = 'Cart is empty!'
         messages.warning(request, msg)
+
         return redirect('cart:home')
     else:
+        if request.method == 'POST':
+            form = CartForm(request.POST)
+            if form.is_valid():
+                cart_obj.manifestation = form.cleaned_data.get('manifestation')
+                cart_obj.address = form.cleaned_data.get('address')
+                cart_obj.beginning = form.cleaned_data.get('beginning')
+                cart_obj.ending = form.cleaned_data.get('ending')
+                cart_obj.delivery = form.cleaned_data.get('delivery')
+                cart_obj.pickup = form.cleaned_data.get('pickup')
+                cart_obj.personal_name = form.cleaned_data.get('personal_name')
+                cart_obj.email = form.cleaned_data.get('email')
+                cart_obj.phone = form.cleaned_data.get('phone')
+                cart_obj.save()
+        else:
+            form = CartForm()
+
         order_obj, new_order_obj = Order.objects.get_or_create(cart=cart_obj)
-    return render(request, 'carts/checkout.html', {'object': order_obj})
+        request.session['cart_id'] = None
+        request.session['cart_items'] = 0
+    # return render(request, 'carts/checkout.html', {'object': order_obj})
+    return redirect('orders:home')

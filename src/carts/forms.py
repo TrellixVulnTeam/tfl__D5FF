@@ -24,7 +24,7 @@ class CartForm(forms.ModelForm):
             'minDate': (datetime.date.today() + datetime.timedelta(days=1)).strftime('%Y-%m-%d'),  # Tomorrow
             'useCurrent': False,
             'collapse': False,
-            'format': 'DD/MM/YYYY HH:mm:ss'
+            'format': 'DD/MM/YYYY HH:mm'
         },
         attrs={'class': 'form-control',
                'id': 'inputBiginning',
@@ -39,7 +39,7 @@ class CartForm(forms.ModelForm):
             'minDate': (datetime.date.today() + datetime.timedelta(days=1)).strftime('%Y-%m-%d'),  # Tomorrow
             'useCurrent': False,
             'collapse': False,
-            'format': 'DD/MM/YYYY HH:mm:ss'
+            'format': 'DD/MM/YYYY HH:mm'
         },
         attrs={'class': 'form-control',
                'id': 'inputEnding',
@@ -54,7 +54,7 @@ class CartForm(forms.ModelForm):
             'minDate': (datetime.date.today() + datetime.timedelta(days=1)).strftime('%Y-%m-%d'),  # Tomorrow
             'useCurrent': False,
             'collapse': False,
-            'format': 'DD/MM/YYYY HH:mm:ss'
+            'format': 'DD/MM/YYYY HH:mm'
         },
         attrs={'class': 'form-control',
                'id': 'inputDelivery',
@@ -69,7 +69,7 @@ class CartForm(forms.ModelForm):
             'minDate': (datetime.date.today() + datetime.timedelta(days=1)).strftime('%Y-%m-%d'),  # Tomorrow
             'useCurrent': False,
             'collapse': False,
-            'format': 'DD/MM/YYYY HH:mm:ss'
+            'format': 'DD/MM/YYYY HH:mm'
         },
         attrs={'class': 'form-control',
                'id': 'inputPickup',
@@ -112,16 +112,33 @@ class CartForm(forms.ModelForm):
                   'phone'
                   )
 
-    # def clean_password2(self):
-    #     password = self.cleaned_data.get('password')
-    #     password2 = self.cleaned_data.get('password2')
-    #
-    #     if password and password2 and password2 != password:
-    #         raise forms.ValidationError("Password must match!")
-    #     return password2
+    def clean_beginning(self):
+        beginning = self.cleaned_data.get('beginning')
+        date_time_obj = datetime.datetime.strptime(beginning, '%d/%m/%Y %H:%M')
 
-    def save(self, commit=True):
-        cart = super(CartForm, self).save(commit=False)
-        if commit:
-            cart.save()
-        return cart
+        return date_time_obj
+
+    def clean_ending(self):
+        ending = self.cleaned_data.get('ending')
+        date_time_obj = datetime.datetime.strptime(ending, '%d/%m/%Y %H:%M')
+
+        return date_time_obj
+
+    def clean_delivery(self):
+        delivery = self.cleaned_data.get('delivery')
+        date_time_obj = datetime.datetime.strptime(delivery, '%d/%m/%Y %H:%M')
+
+        return date_time_obj
+
+    def clean_pickup(self):
+        pickup = self.cleaned_data.get('pickup')
+        date_time_obj = datetime.datetime.strptime(pickup, '%d/%m/%Y %H:%M')
+
+        return date_time_obj
+
+    # def save(self, commit=True):
+    #     cart = super(CartForm, self).save(commit=False)
+    #     if commit:
+    #         cart.save()
+    #         print('OVO SE POZIVA!!!')
+    #     return cart

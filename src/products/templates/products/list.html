@@ -3,7 +3,6 @@
 
 {% block content %}
     {% include 'search/snippets/search-form.html' with category_list=all_categories %}
-    <!--<div class="container">-->
         <hr/>
         <div class="card-deck">
             {% for obj in object_list %}
@@ -12,5 +11,24 @@
                 </div>
             {% endfor %}
         </div>
-    <!--</div>-->
+
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+
+                <li class="page-item {% if not products.has_previous %} disabled {% endif %}">
+                  <a class="page-link" href=" {% if products.has_previous %} ?page={{ products.previous_page_number }} {% endif %}" tabindex="-1">Previous</a>
+                </li>
+
+                {% for pg in products.paginator.page_range %}
+                    <li class="page-item {% if pg ==  products.number %} active bg-dark {% endif %} ">
+                        <a class="page-link" href="?page={{ pg }}">{{ pg }}</a>
+                    </li>
+                {% endfor %}
+
+                <li class="page-item {% if not products.has_next %} disabled {% endif %}">
+                  <a class="page-link" href="{% if products.has_next %} ?page={{ products.next_page_number }} {% endif %}">Next</a>
+                </li>
+
+            </ul>
+        </nav>
 {% endblock %}

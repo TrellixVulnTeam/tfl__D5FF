@@ -1,6 +1,7 @@
 from django.views.generic import ListView, DetailView, CreateView
 from django.http import Http404
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator
 
 from .models import Product, ProductCategory
 from .forms import ProductForm
@@ -9,6 +10,7 @@ from .forms import ProductForm
 class ProductListView(ListView):
     # queryset = Product.objects.all()
     template_name = "products/list.html"
+    paginate_by = 12
 
     def get_queryset(self, *args, **kwargs):
         # request = self.request
@@ -16,8 +18,11 @@ class ProductListView(ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(ProductListView, self).get_context_data(*args, **kwargs)
+        p = Paginator(Product.objects.select_related().all(), self.paginate_by)
+        context['products'] = p.page(context['page_obj'].number)
         all_categories = ProductCategory.objects.all()
         context['all_categories'] = all_categories
+
         return context
 
 # def product_list_view(request):
