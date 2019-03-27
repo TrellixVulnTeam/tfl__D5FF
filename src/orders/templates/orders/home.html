@@ -22,18 +22,35 @@
                         <th scope="col">Username</th>
                         <th scope="col">Created</th>
                         <th scope="col">Order ID</th>
+                        <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for obj in object_list %}
                     <tr>
                         <th scope="row">{{ forloop.counter }}</th>
-                        <td>{{ obj.cart.manifestation }}</td>
-                        <td>{{ obj.cart.delivery }} - {{ obj.cart.pickup }}</td>
-                        <td>{{ obj.status }}</td>
-                        <td>{{ obj.cart.username }}</td>
+                        <td><a href="{{ obj.get_absolute_url }}">{{ obj.cart.manifestation }}</a></td>
+                        <td>{{ obj.cart.delivery|date:"d F Y H:i" }} - {{ obj.cart.pickup|date:"d F Y H:i" }}</td>
+                        <td>
+                            {% if obj.status == 'created' %}
+                                <i class="fas fa-check"></i>
+                            {% elif obj.status == 'confirm' %}
+                                <i class="fas fa-check-double"></i>
+                            {% else %}
+                                <i class="fas fa-times"></i>
+                            {% endif %}
+                        </td>
+                        <td>{{ obj.cart.user.username }}</td>
                         <td>{{ obj.timestamp }}</td>
                         <td>{{ obj.id }}</td>
+                        <td>
+                            {% if obj.status != 'confirm' and obj.status != 'canceled' %}
+                                <form method="POST" action="{% url 'orders:confirm' %}" class="form" style="justify-content: center; display: flex;"> {% csrf_token %}
+                                    <input type="hidden" name="order_id" value="{{ obj.id }}" />
+                                    <button type="submit" style="border: None; background: None">Confirm<i class="fas fa-check-double"></i></button>
+                                </form>
+                            {% endif %}
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>

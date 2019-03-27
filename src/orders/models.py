@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models.signals import pre_save, post_save
+from django.urls import reverse
 
 from carts.models import Cart
 from tfl.utils import unique_order_id_generator
@@ -38,6 +39,9 @@ class Order(models.Model):
 
     def __str__(self):
         return self.order_id
+
+    def get_absolute_url(self):
+        return reverse('orders:detail', kwargs={'id': self.id})
 
     def update_total(self):
         self.total_price = self.cart.total_price

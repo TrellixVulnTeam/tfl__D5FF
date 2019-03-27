@@ -1,5 +1,4 @@
 import random
-import datetime
 import os
 from django.db import models
 from django.db.models import Q
@@ -8,6 +7,7 @@ from django.urls import reverse
 
 from tfl.utils import unique_slug_generator
 from companies.models import Company
+
 
 def get_filename_ext(filepath):
     base_name = os.path.basename(filepath)

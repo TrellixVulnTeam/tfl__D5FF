@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block base_head %}
+    <link rel="stylesheet" href="{% static 'css/tfl.css' %}">
+    {{ form.media }}
+{% endblock %}
+
+{% block content %}
+    <h1 class="mb-3">
+      <i class="fas fa-shopping-cart"></i>
+    </h1>
+
+    <div class="row">
+{#      <form method="POST" action="{% url 'cart:checkout' %}" class="form col-md-12" style="justify-content: center; display: flex;"> {% csrf_token %}#}
+      <div class="col-md-4">
+        {{ form }}
+      </div>
+      <div class="col-md-8">
+        <div class="table-responsive-sm">
+          <table class="table table-sm">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Product Name</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Price</th>
+{#                <th scope="col">Remove</th>#}
+              </tr>
+            </thead>
+            <tbody>
+              {% for p in object.cart.products.all %}
+              <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>
+                  <a href="{{p.product.get_absolute_url}}"> {{p.product.title}}</a>
+                </td>
+                <td>
+                  <input class="form-control" disabled="true" type="number" value="{{ p.quantity }}" id="quantity-input">
+                </td>
+                <td>{{ p.product.price }}</td>
+{#                <td>#}
+{#                  <form method="POST" action="{% url 'cart:remove' %}" class="form" style="justify-content: center; display: flex;"> {% csrf_token %}#}
+{#                    <input type="hidden" name="product_id" value="{{ p.product.id }}" />#}
+{#                    <button type="submit" style="border: None; background: None"><i class="fas fa-trash-alt"></i></button>#}
+{#                  </form>#}
+{#                </td>#}
+              </tr>
+              {% endfor %}
+              <tr>
+                <td colspan="4"></td>
+                <td>Weight: {{ object.cart.total_weight }}</td>
+              </tr>
+              <tr>
+                <td colspan="4"></td>
+                <td>Total: {{ object.cart.total_price }}</td>
+              </tr>
+{#              <tr>#}
+{#                <td colspan="4"></td>#}
+{#                <td>#}
+{#                  <button type="submit" class="btn btn-lg btn-success">Checkout</button>#}
+{#                </td>#}
+{#              </tr>#}
+            </tbody>
+          </table>
+        </div>
+      </div>
+{#    </form>#}
+    </div>
+
+{% endblock %}

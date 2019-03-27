@@ -1,14 +1,15 @@
 from django.urls import path
 
 from .views import (
-        AllOrdersView
+        AllOrdersView,
+        OrderDetailView,
+        order_confirm
 )
 
 app_name = 'orders'
 
 urlpatterns = [
     path('', AllOrdersView.as_view(), name='home'),
-    # path('add/', cart_add, name='add'),
-    # path('checkout/', checkout_home, name='checkout'),
-    # path('remove/', CartRemoveView.as_view(), name='remove'),
+    path('<slug:id>/', OrderDetailView.as_view(), name='detail'),
+    path('confirm/', order_confirm, name='confirm'),
 ]
