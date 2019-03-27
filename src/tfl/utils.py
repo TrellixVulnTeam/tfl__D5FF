@@ -43,3 +43,15 @@ def unique_slug_generator(instance, new_slug=None):
                 )
         return unique_slug_generator(instance, new_slug=new_slug)
     return slug
+
+
+def format_datetime_obj(datetime_obj):
+    year = datetime_obj.year
+    month = datetime_obj.month
+    day = datetime_obj.day
+    hour = datetime_obj.hour
+    minute = datetime_obj.minute
+
+    datetime_str = datetime.datetime(year, month, day, hour, minute)
+
+    print(x.strftime("%b %d %Y %H:%M:%S"))

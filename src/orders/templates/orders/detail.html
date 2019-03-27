@@ -13,10 +13,63 @@
 
     <div class="row">
 {#      <form method="POST" action="{% url 'cart:checkout' %}" class="form col-md-12" style="justify-content: center; display: flex;"> {% csrf_token %}#}
-      <div class="col-md-4">
-        {{ form }}
+      <div class="col-md-6">
+          <div class="input-group">
+              <div class="input-group-prepend">
+                  <span class="input-group-text" id="inputGroupPrepend2" style="width: 120px">Manifestation</span>
+              </div>
+              <input type="text" class="form-control" id="validationDefaultUsername" disabled="true" value="{{ object.cart.manifestation }}">
+          </div>
+          <div class="input-group">
+              <div class="input-group-prepend" >
+                  <span class="input-group-text" id="inputGroupPrepend2" style="width: 120px">Address</span>
+              </div>
+              <input type="text" class="form-control" id="validationDefaultUsername" disabled="true" value="{{ object.cart.address }}">
+          </div>
+          <div class="input-group">
+              <div class="input-group-prepend">
+                  <span class="input-group-text" id="inputGroupPrepend2" style="width: 120px">Beginning</span>
+              </div>
+              <input type="text" class="form-control" id="validationDefaultUsername" disabled="true" value="{{ object.cart.beginning|date:'d/m/Y H:i' }}">
+          </div>
+          <div class="input-group">
+              <div class="input-group-prepend">
+                  <span class="input-group-text" id="inputGroupPrepend2" style="width: 120px">Ending</span>
+              </div>
+              <input type="text" class="form-control" id="validationDefaultUsername" disabled="true" value="{{ object.cart.ending|date:'d/m/Y H:i' }}">
+          </div>
+          <div class="input-group">
+              <div class="input-group-prepend">
+                  <span class="input-group-text" id="inputGroupPrepend2" style="width: 120px">Delivery</span>
+              </div>
+              <input type="text" class="form-control" id="validationDefaultUsername" disabled="true" value="{{ object.cart.delivery|date:'d/m/Y H:i' }}">
+          </div>
+          <div class="input-group">
+              <div class="input-group-prepend">
+                  <span class="input-group-text" id="inputGroupPrepend2" style="width: 120px">Pickup</span>
+              </div>
+              <input type="text" class="form-control" id="validationDefaultUsername" disabled="true" value="{{ object.cart.pickup|date:'d/m/Y H:i' }}">
+          </div>
+          <div class="input-group">
+              <div class="input-group-prepend">
+                  <span class="input-group-text" id="inputGroupPrepend2" style="width: 120px">Person</span>
+              </div>
+              <input type="text" class="form-control" id="validationDefaultUsername" disabled="true" value="{{ object.cart.personal_name }}">
+          </div>
+          <div class="input-group">
+              <div class="input-group-prepend">
+                  <span class="input-group-text" id="inputGroupPrepend2" style="width: 120px">Email</span>
+              </div>
+              <input type="text" class="form-control" id="validationDefaultUsername" disabled="true" value="{{ object.cart.email }}">
+          </div>
+          <div class="input-group">
+              <div class="input-group-prepend">
+                  <span class="input-group-text" id="inputGroupPrepend2" style="width: 120px">Phone</span>
+              </div>
+              <input type="text" class="form-control" id="validationDefaultUsername" disabled="true" value="{{ object.cart.phone }}">
+          </div>
       </div>
-      <div class="col-md-8">
+      <div class="col-md-6">
         <div class="table-responsive-sm">
           <table class="table table-sm">
             <thead class="thead-dark">
@@ -35,9 +88,7 @@
                 <td>
                   <a href="{{p.product.get_absolute_url}}"> {{p.product.title}}</a>
                 </td>
-                <td>
-                  <input class="form-control" disabled="true" type="number" value="{{ p.quantity }}" id="quantity-input">
-                </td>
+                <td>{{ p.quantity }}</td>
                 <td>{{ p.product.price }}</td>
 {#                <td>#}
 {#                  <form method="POST" action="{% url 'cart:remove' %}" class="form" style="justify-content: center; display: flex;"> {% csrf_token %}#}
@@ -48,11 +99,11 @@
               </tr>
               {% endfor %}
               <tr>
-                <td colspan="4"></td>
+                <td colspan="3"></td>
                 <td>Weight: {{ object.cart.total_weight }}</td>
               </tr>
               <tr>
-                <td colspan="4"></td>
+                <td colspan="3"></td>
                 <td>Total: {{ object.cart.total_price }}</td>
               </tr>
 {#              <tr>#}

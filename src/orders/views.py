@@ -18,19 +18,45 @@ class AllOrdersView(LoginRequiredMixin, ListView):
 
 
 class OrderDetailView(DetailView):
-    #queryset = Order.objects.all()
     template_name = "orders/detail.html"
 
-
     def get_object(self, *args, **kwargs):
-        # request = self.request
-        id = self.kwargs.get('id')
+        xid = self.kwargs.get('id')
         try:
-            instance = Order.objects.get(id=id)
+            instance = Order.objects.get(id=xid)
+
+            # instance.form = OrderForm()
+            #
+            # str = instance.cart.delivery
+            # # date_object = datetime.strptime(str, '%d/%m/%y %H:%m')
+            # # print(date_object)
+            # print(str.year)
+            # print(str.strftime("%d/%m/%Y %H:%M"))
+            #
+            # form = OrderForm(initial={
+            #                     'manifestation': instance.cart.manifestation,
+            #                     'address': instance.cart.address,
+            #                     'beginning': instance.cart.beginning,
+            #                     'ending': instance.cart.ending,
+            #                     'delivery': str.strftime("%d/%m/%Y %H:%M"),
+            #                     'pickup': instance.cart.pickup,
+            #                     'personal_name': instance.cart.personal_name,
+            #                     'email': instance.cart.email,
+            #                     'phone': instance.cart.phone
+            #                 })
+            #
+            # instance.form = form
+            #
+            #
+            # str = instance.cart.delivery
+            # #date_object = datetime.strptime(str, '%d/%m/%y %H:%m')
+            # #print(date_object)
+            # print(str.year)
+            # print(str.strftime("%d/%m/%Y %H:%M"))
         except Order.DoesNotExist:
             raise Http404("Order doesn't exist!")
         except Order.MultipleObjectsReturned:
-            qs = Order.objects.filter(id=id)
+            qs = Order.objects.filter(id=xid)
             instance = qs.first()
         except:
             raise Http404("Uhhh")

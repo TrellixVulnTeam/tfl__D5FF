@@ -49,7 +49,7 @@ class ProductListView(ListView):
 #         return instance
 
 class ProductDetailView(DetailView):
-    queryset = Product.objects.all()
+    # queryset = Product.objects.all()
     template_name = "products/detail.html"
 
     # def get_context_data(self, *args, **kwargs):
