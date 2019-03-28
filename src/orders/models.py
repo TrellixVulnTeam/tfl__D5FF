@@ -1,9 +1,13 @@
+from django.conf import settings
 from django.db import models
 from django.db.models.signals import pre_save, post_save
 from django.urls import reverse
+from django.db.models import Q
 
 from carts.models import Cart
 from tfl.utils import unique_order_id_generator
+
+User = settings.AUTH_USER_MODEL
 
 ORDER_STATUS_CHOICES = (
     ('created', 'Created'),
@@ -13,19 +17,32 @@ ORDER_STATUS_CHOICES = (
 
 
 class OrderQuerySet(models.query.QuerySet):
-    def active(self):
+    def all(self):
         return self.filter(active=True).order_by('-timestamp')
+
+    def my_orders(self, user):
+        lookups = (Q(cart__user=user) &
+                   Q(active=True)
+                   )
+        return self.filter(lookups).order_by('-timestamp')
 
 
 class OrderManager(models.Manager):
     def get_queryset(self):
         return OrderQuerySet(self.model, using=self._db)
 
-    def all(self):
-        return self.get_queryset().active()
+    def my_orders(self, user):
+        return self.get_queryset().my_orders(user)
+
+    def all(self, user):
+        if user.is_staff or user.is_admin:
+            return self.get_queryset().all()
+        else:
+            return self.my_orders(user)
 
 
 class Order(models.Model):
+    # user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     order_id = models.CharField(max_length=120, blank=True)
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     status = models.CharField(max_length=120, default='created', choices=ORDER_STATUS_CHOICES)

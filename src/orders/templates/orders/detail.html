@@ -8,66 +8,70 @@
 
 {% block content %}
     <h1 class="mb-3">
-      <i class="fas fa-shopping-cart"></i>
+      <i class="fas fa-dolly-flatbed"></i>
     </h1>
 
     <div class="row">
 {#      <form method="POST" action="{% url 'cart:checkout' %}" class="form col-md-12" style="justify-content: center; display: flex;"> {% csrf_token %}#}
-      <div class="col-md-6">
-          <div class="input-group">
+            <div class="col-md-6">
+            <div class="input-group">
               <div class="input-group-prepend">
                   <span class="input-group-text" id="inputGroupPrepend2" style="width: 120px">Manifestation</span>
               </div>
               <input type="text" class="form-control" id="validationDefaultUsername" disabled="true" value="{{ object.cart.manifestation }}">
-          </div>
-          <div class="input-group">
+            </div>
+            <div class="input-group">
               <div class="input-group-prepend" >
                   <span class="input-group-text" id="inputGroupPrepend2" style="width: 120px">Address</span>
               </div>
               <input type="text" class="form-control" id="validationDefaultUsername" disabled="true" value="{{ object.cart.address }}">
-          </div>
-          <div class="input-group">
+            </div>
+            <div class="input-group">
               <div class="input-group-prepend">
                   <span class="input-group-text" id="inputGroupPrepend2" style="width: 120px">Beginning</span>
               </div>
               <input type="text" class="form-control" id="validationDefaultUsername" disabled="true" value="{{ object.cart.beginning|date:'d/m/Y H:i' }}">
-          </div>
-          <div class="input-group">
+            </div>
+            <div class="input-group">
               <div class="input-group-prepend">
                   <span class="input-group-text" id="inputGroupPrepend2" style="width: 120px">Ending</span>
               </div>
               <input type="text" class="form-control" id="validationDefaultUsername" disabled="true" value="{{ object.cart.ending|date:'d/m/Y H:i' }}">
-          </div>
-          <div class="input-group">
+            </div>
+            <div class="input-group">
               <div class="input-group-prepend">
                   <span class="input-group-text" id="inputGroupPrepend2" style="width: 120px">Delivery</span>
               </div>
               <input type="text" class="form-control" id="validationDefaultUsername" disabled="true" value="{{ object.cart.delivery|date:'d/m/Y H:i' }}">
-          </div>
-          <div class="input-group">
+            </div>
+            <div class="input-group">
               <div class="input-group-prepend">
                   <span class="input-group-text" id="inputGroupPrepend2" style="width: 120px">Pickup</span>
               </div>
               <input type="text" class="form-control" id="validationDefaultUsername" disabled="true" value="{{ object.cart.pickup|date:'d/m/Y H:i' }}">
-          </div>
-          <div class="input-group">
+            </div>
+            <div class="input-group">
               <div class="input-group-prepend">
                   <span class="input-group-text" id="inputGroupPrepend2" style="width: 120px">Person</span>
               </div>
               <input type="text" class="form-control" id="validationDefaultUsername" disabled="true" value="{{ object.cart.personal_name }}">
-          </div>
-          <div class="input-group">
+            </div>
+            <div class="input-group">
               <div class="input-group-prepend">
                   <span class="input-group-text" id="inputGroupPrepend2" style="width: 120px">Email</span>
               </div>
               <input type="text" class="form-control" id="validationDefaultUsername" disabled="true" value="{{ object.cart.email }}">
-          </div>
-          <div class="input-group">
+            </div>
+            <div class="input-group">
               <div class="input-group-prepend">
                   <span class="input-group-text" id="inputGroupPrepend2" style="width: 120px">Phone</span>
               </div>
               <input type="text" class="form-control" id="validationDefaultUsername" disabled="true" value="{{ object.cart.phone }}">
-          </div>
+            </div>
+            {% if request.user.is_staff %}
+                <button type="button" class="btn btn-info">Edit</button>
+            {% endif %}
+
       </div>
       <div class="col-md-6">
         <div class="table-responsive-sm">

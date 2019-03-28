@@ -94,7 +94,6 @@ class ProductManager(models.Manager):
         return None
 
     def search(self, category, query):
-        print(query)
         if category and query:
             return self.get_queryset().active().search_cq(category, query)
         elif category:

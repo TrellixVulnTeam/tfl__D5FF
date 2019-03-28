@@ -43,7 +43,7 @@ class CartRemoveView(LoginRequiredMixin, NextUrlMixin, DeleteView):
                 if p.product == product_obj:
                     cart_obj.products.remove(p)
                     request.session['cart_items'] = cart_obj.products.count()
-                    return p  # automatski brise iz baze objekat p
+                    # return p  # automatski brise iz baze objekat p
         return None
 
     def get_success_url(self):

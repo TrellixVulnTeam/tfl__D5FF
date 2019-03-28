@@ -3,9 +3,11 @@ from django import forms
 from .models import Product, ProductCategory
 from companies.models import Company
 
+from tfl.forms import MyImageWidget
+
 
 class ProductForm(forms.ModelForm):
-    image = forms.ImageField()
+    image = forms.ImageField(widget=MyImageWidget, label='')
     title = forms.CharField(widget=forms.TextInput(
         attrs={'class': 'form-control mb-1',
                'id': 'inputTitle',

@@ -10,7 +10,9 @@ class AllOrdersView(LoginRequiredMixin, ListView):
     template_name = 'orders/home.html'
 
     def get_queryset(self):
-        return Order.objects.all()
+        user = self.request.user
+        return Order.objects.all(user)
+        # return Order.objects.my_orders(self.request.user)
 
     def get_context_data(self, *args, **kwargs):
         context = super(AllOrdersView, self).get_context_data(*args, **kwargs)

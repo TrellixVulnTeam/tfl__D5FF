@@ -7,7 +7,7 @@
 
 {% block content %}
     <h1 class="mb-3">
-      <i class="fas fa-dolly-flatbed"></i>
+        <i class="fas fa-list-ul"></i>
     </h1>
     <div class="row">
       <div class="col-md-12">
@@ -44,11 +44,13 @@
                         <td>{{ obj.timestamp }}</td>
                         <td>{{ obj.id }}</td>
                         <td>
-                            {% if obj.status != 'confirm' and obj.status != 'canceled' %}
-                                <form method="POST" action="{% url 'orders:confirm' %}" class="form" style="justify-content: center; display: flex;"> {% csrf_token %}
-                                    <input type="hidden" name="order_id" value="{{ obj.id }}" />
-                                    <button type="submit" style="border: None; background: None">Confirm<i class="fas fa-check-double"></i></button>
-                                </form>
+                            {% if request.user.is_admin or request.user.is_staff %}
+                                {% if obj.status != 'confirm' and obj.status != 'canceled' %}
+                                    <form method="POST" action="{% url 'orders:confirm' %}" class="form" style="justify-content: center; display: flex;"> {% csrf_token %}
+                                        <input type="hidden" name="order_id" value="{{ obj.id }}" />
+                                        <button type="submit" style="border: None; background: None">Confirm<i class="fas fa-check-double"></i></button>
+                                    </form>
+                                {% endif %}
                             {% endif %}
                         </td>
                     </tr>

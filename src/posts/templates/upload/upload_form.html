@@ -1,0 +1,12 @@
+<div class="custom-file col-sm-6">
+  <input required="{{ widget.is_required }}" type="{{ widget.type }}" name="{{ widget.name }}" value="{{ widget.value }}" accept="image/*" class="custom-file-input" id="customFile">
+  <label id="fileLabel" class="custom-file-label" for="customFile">Choose image</label>
+</div>
+<script>
+    document.getElementById("customFile").onchange = function () {
+        var fileName = this.value;
+        var n = fileName.lastIndexOf("fakepath\\");
+        var name = fileName.substr(n+9);
+        $('#fileLabel').text(name);
+    };
+</script>
