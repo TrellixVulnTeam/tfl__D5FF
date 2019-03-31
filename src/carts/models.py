@@ -70,3 +70,4 @@ def pre_save_cart_receiver(sender, instance, action, *args, **kwargs):
 
 
 m2m_changed.connect(pre_save_cart_receiver, sender=Cart.products.through)
+

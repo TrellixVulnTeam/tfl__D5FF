@@ -6,7 +6,7 @@
         <form enctype="multipart/form-data" class="text-center" method="POST" action="{% url 'post:add' %}"> {% csrf_token %}
             <div class="row">
                 <div class="col-sm-2 mt-5"></div>
-                <div class="col-sm-8 mt-5">
+                <div class="col-sm-8 mt-5" style="text-align: left;">
                     {{ form.as_p }}
                 </div>
                 <div class="col-sm-2 mt-5"></div>
@@ -28,11 +28,14 @@
                     {% include 'posts/snippets/card.html' with instance=obj %}
                 </div>
                 <div class="col-sm-2 mt-5">
-                <form enctype="multipart/form-data" class="text-center" method="POST" action="{% url 'post:remove' %}"> {% csrf_token %}
-                    <input type="hidden" name="post_id" value="{{ obj.id }}" />
-                    <button type="submit">xxxxx</button>
-                </form>
-
+                {% if request.user.is_authenticated %}
+                    {% if request.user.is_admin or request.user.is_staff %}
+                        <form enctype="multipart/form-data" class="text-left" method="POST" action="{% url 'post:remove' %}"> {% csrf_token %}
+                            <input type="hidden" name="post_id" value="{{ obj.id }}" />
+                            <button type="submit" style="border: None; background: None; color: red;" title="Remove"><i class="fas fa-times"></i></button>
+                        </form>
+                    {% endif %}
+                {% endif %}
                 </div>
             {% endfor %}
         </div>

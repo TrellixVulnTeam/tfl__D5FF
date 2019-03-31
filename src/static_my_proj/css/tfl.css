@@ -5,19 +5,17 @@
     margin: 0 auto;
 }
 
-td {
-  text-align: center;
-  vertical-align: middle;
-}
+/*td {*/
+/*  text-align: center;*/
+/*  vertical-align: middle;*/
+/*}*/
 
-th {
-    text-align: center;
-    vertical-align: middle;
-}
+/*th {*/
+/*    text-align: center;*/
+/*    vertical-align: middle;*/
+/*}*/
 
 .input-group {
     margin-bottom: .25rem
 }
 
-id_company
-id_category

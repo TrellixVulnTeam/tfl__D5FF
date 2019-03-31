@@ -3,6 +3,8 @@ from django.shortcuts import render, redirect
 from django.views.generic import UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 from products.models import Product, CartProduct
 from .models import Cart
@@ -123,3 +125,16 @@ def checkout_home(request):
         request.session['cart_items'] = 0
     # return render(request, 'carts/checkout.html', {'object': order_obj})
     return redirect('orders:home')
+
+
+@csrf_exempt
+def validate_quantity(request):
+    product_id = request.POST.get('product_id', None)
+    product_quantity = request.POST.get('product_quantity', None)
+
+    data = {
+        'is_taken': True,
+        'test': 'TEST!!!'
+    }
+
+    return JsonResponse(data)

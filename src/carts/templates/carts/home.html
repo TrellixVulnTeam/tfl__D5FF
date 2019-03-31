@@ -36,13 +36,13 @@
                   <a href="{{p.product.get_absolute_url}}"> {{p.product.title}}</a>
                 </td>
                 <td>
-                  <input class="form-control" type="number" value="{{ p.quantity }}" id="quantity-input">
+                  <input class="form-control" type="number" value="{{ p.quantity }}" id="{{ p.product.id }}" onchange="validate_quantity({{ p.product.id }}, this.value)">
                 </td>
                 <td>{{ p.product.price }}</td>
                 <td>
                   <form method="POST" action="{% url 'cart:remove' %}" class="form" style="justify-content: center; display: flex;"> {% csrf_token %}
                     <input type="hidden" name="product_id" value="{{ p.product.id }}" />
-                    <button type="submit" style="border: None; background: None"><i class="fas fa-trash-alt"></i></button>
+                    <button title="Remove" type="submit" style="border: None; background: None"><i class="fas fa-trash-alt"></i></button>
                   </form>
                 </td>
               </tr>
@@ -67,5 +67,4 @@
       </div>
     </form>
     </div>
-
 {% endblock %}
