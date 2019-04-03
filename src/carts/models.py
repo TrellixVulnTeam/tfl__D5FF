@@ -69,5 +69,38 @@ def pre_save_cart_receiver(sender, instance, action, *args, **kwargs):
         instance.save()
 
 
+def pre_save_cart_product_receiver(sender, instance, action, *args, **kwargs):
+    if action == 'post_add' or action == 'post_remove' or action == 'post_clear':
+        products = instance.products.all()
+        total_price = 0
+        total_weight = 0
+        for p in products:
+            total_price += p.product.price * p.quantity
+            total_weight += p.product.weight * p.quantity
+
+        instance.total_price = total_price
+        instance.total_weight = total_weight
+        instance.save()
+
+
 m2m_changed.connect(pre_save_cart_receiver, sender=Cart.products.through)
 
+
+def update_cart_total(sender, instance, **kwargs):
+    post_save.disconnect(update_cart_total, sender=sender)
+
+    products = instance.products.all()
+    total_price = 0
+    total_weight = 0
+    for p in products:
+        total_price += p.product.price * p.quantity
+        total_weight += p.product.weight * p.quantity
+
+    instance.total_price = total_price
+    instance.total_weight = total_weight
+    instance.save()
+
+    post_save.connect(update_cart_total, sender=sender)
+
+
+post_save.connect(update_cart_total, sender=Cart)

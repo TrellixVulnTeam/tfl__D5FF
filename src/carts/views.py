@@ -11,6 +11,7 @@ from .models import Cart
 from .forms import CartForm
 from orders.models import Order
 from tfl.mixins import NextUrlMixin
+from tfl import utils
 
 
 class CartView(LoginRequiredMixin, NextUrlMixin, UpdateView):
@@ -23,33 +24,34 @@ class CartView(LoginRequiredMixin, NextUrlMixin, UpdateView):
         return cart_obj
 
 
-class CartRemoveView(LoginRequiredMixin, NextUrlMixin, DeleteView):
-    form_class = CartForm
-    template_name = 'carts/home.html'
-    success_url = '/cart'
-
-    # def get_object(self, queryset=None):
-    #     cart_obj, new_obj = Cart.objects.new_or_get(self.request)
-    #     return cart_obj
-
-    def get_object(self, queryset=None):
-        request = self.request
-        product_id = request.POST.get('product_id')
-        if product_id is not None:
-            try:
-                product_obj = Product.objects.get(id=product_id)
-            except Product.DoesNotExist:
-                return redirect('cart:home')
-            cart_obj, new_obj = Cart.objects.new_or_get(request)
-            for p in cart_obj.products.all():
-                if p.product == product_obj:
-                    cart_obj.products.remove(p)
-                    request.session['cart_items'] = cart_obj.products.count()
-                    # return p  # automatski brise iz baze objekat p
-        return None
-
-    def get_success_url(self):
-        return reverse('cart:home')
+# @csrf_exempt
+# class CartRemoveView(LoginRequiredMixin, NextUrlMixin, DeleteView):
+#     form_class = CartForm
+#     template_name = 'carts/home.html'
+#     success_url = '/cart'
+#
+#     # def get_object(self, queryset=None):
+#     #     cart_obj, new_obj = Cart.objects.new_or_get(self.request)
+#     #     return cart_obj
+#
+#     def get_object(self, queryset=None):
+#         request = self.request
+#         product_id = request.POST.get('product_id')
+#         if product_id is not None:
+#             try:
+#                 product_obj = Product.objects.get(id=product_id)
+#             except Product.DoesNotExist:
+#                 return redirect('cart:home')
+#             cart_obj, new_obj = Cart.objects.new_or_get(request)
+#             for p in cart_obj.products.all():
+#                 if p.product == product_obj:
+#                     cart_obj.products.remove(p)
+#                     request.session['cart_items'] = cart_obj.products.count()
+#                     # return p  # automatski brise iz baze objekat p
+#         return None
+#
+#     def get_success_url(self):
+#         return reverse('cart:home')
 
 # def cart_home(request):
 #     form = CartForm()
@@ -128,13 +130,67 @@ def checkout_home(request):
 
 
 @csrf_exempt
+def cart_field_change(request):
+    field_name = request.POST.get('field_name')
+    field_value = request.POST.get('field_value')
+    date_field = request.POST.get('date_field')
+
+    print(field_value)
+
+    if date_field == '1':
+        field_value = utils.get_date_obj(field_value)
+
+    cart_obj, new_obj = Cart.objects.new_or_get(request)
+
+    setattr(cart_obj, field_name, field_value)
+
+    cart_obj.save()
+
+    return JsonResponse({})
+
+
+@csrf_exempt
 def validate_quantity(request):
     product_id = request.POST.get('product_id', None)
     product_quantity = request.POST.get('product_quantity', None)
+    data = None
 
-    data = {
-        'is_taken': True,
-        'test': 'TEST!!!'
-    }
+    try:
+        product_obj = Product.objects.get(id=product_id)
+        cart_obj, new_obj = Cart.objects.new_or_get(request)
+        for p in cart_obj.products.all():
+            if p.product == product_obj:
+                p.quantity = product_quantity
+                p.save()
+                cart_obj.save()
+
+                data = {
+                    'total_weight': cart_obj.total_weight,
+                    'total_price': cart_obj.total_price
+                }
+    except Product.DoesNotExist:
+        return redirect('cart:home')
+
+    return JsonResponse(data)
+
+
+@csrf_exempt
+def cart_remove(request):
+    product_id = request.POST.get('product_id')
+    data = None
+    if product_id is not None:
+        try:
+            product_obj = Product.objects.get(id=product_id)
+        except Product.DoesNotExist:
+            return redirect('cart:home')
+        cart_obj, new_obj = Cart.objects.new_or_get(request)
+        for p in cart_obj.products.all():
+            if p.product == product_obj:
+                cart_obj.products.remove(p)
+        request.session['cart_items'] = cart_obj.products.count()
+
+        data = {
+            'refresh': 'true'
+        }
 
     return JsonResponse(data)

@@ -1,5 +1,6 @@
 import random
 import string
+import datetime
 
 from django.utils.text import slugify
 
@@ -43,6 +44,10 @@ def unique_slug_generator(instance, new_slug=None):
                 )
         return unique_slug_generator(instance, new_slug=new_slug)
     return slug
+
+
+def get_date_obj(date_value):
+        return datetime.datetime.strptime(date_value, '%d/%m/%Y %H:%M')
 
 
 def format_datetime_obj(datetime_obj):

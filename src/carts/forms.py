@@ -11,12 +11,16 @@ class CartForm(forms.ModelForm):
         attrs={'class': 'form-control mb-1',
                'id': 'inputManifestation',
                'placeholder': 'Manifestation',
+               'name': 'manifestation',
+               'onChange': 'cart_field_change(name, value, 0)'
                }
     ), label='')
     address = forms.CharField(widget=forms.TextInput(
         attrs={'class': 'form-control mb-1',
                'id': 'inputAddress',
                'placeholder': 'Address',
+               'name': 'address',
+               'onChange': 'cart_field_change(name, value, 0)'
                }
     ), label='')
     beginning = forms.CharField(widget=DateTimePicker(
@@ -32,6 +36,8 @@ class CartForm(forms.ModelForm):
                'append': 'fa fa-calendar',
                'input_toggle': True,
                'icon_toggle': True,
+               'name': 'beginning',
+               'onChange': 'cart_field_change(name, value, 1)'
                }
     ), label='')
     ending = forms.CharField(widget=DateTimePicker(
@@ -47,6 +53,8 @@ class CartForm(forms.ModelForm):
                'append': 'fa fa-calendar',
                'input_toggle': True,
                'icon_toggle': True,
+               'name': 'ending',
+               'onChange': 'cart_field_change(name, value, 1)'
                }
     ), label='')
     delivery = forms.CharField(widget=DateTimePicker(
@@ -62,6 +70,8 @@ class CartForm(forms.ModelForm):
                'append': 'fa fa-calendar',
                'input_toggle': True,
                'icon_toggle': True,
+               'name': 'delivery',
+               'onChange': 'cart_field_change(name, value, 1)'
                }
     ), label='')
     pickup = forms.CharField(widget=DateTimePicker(
@@ -77,18 +87,24 @@ class CartForm(forms.ModelForm):
                'append': 'fa fa-calendar',
                'input_toggle': True,
                'icon_toggle': True,
+               'name': 'pickup',
+               'onChange': 'cart_field_change(name, value, 1)'
                }
     ), label='')
     personal_name = forms.CharField(widget=forms.TextInput(
                                 attrs={'class': 'form-control mb-1',
                                        'id': 'inputPersonalName',
                                        'placeholder': 'Personal Name',
+                                       'name': 'personal_name',
+                                       'onChange': 'cart_field_change(name, value, 0)'
                                        }
                                 ), label='')
     email = forms.EmailField(widget=forms.TextInput(
                                 attrs={'class': 'form-control mb-1',
                                        'id': 'inputEmail',
                                        'placeholder': 'Email',
+                                       'name': 'email',
+                                       'onChange': 'cart_field_change(name, value, 0)'
                                        }
                                 ), label='')
 
@@ -96,6 +112,8 @@ class CartForm(forms.ModelForm):
                                 attrs={'class': 'form-control mb-1',
                                        'id': 'inputPhone',
                                        'placeholder': 'Phone number',
+                                       'name': 'phone',
+                                       'onChange': 'cart_field_change(name, value, 0)'
                                        }
                                 ), label='')
 
