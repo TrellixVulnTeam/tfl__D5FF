@@ -31,9 +31,7 @@ function cart_field_change(field_name, field_value, date_field) {
             },
             dataType: 'json',
             success: function (data) {
-                  if (data) {
-                        alert("Value: " + data.field_value + " " + date_field);
-                  }
+
             }
       });
 }

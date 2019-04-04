@@ -3,6 +3,8 @@ import string
 import datetime
 
 from django.utils.text import slugify
+from django.utils.dateparse import parse_date
+from django.utils.timezone import make_aware
 
 
 def random_string_generator(size=10, chars=string.ascii_lowercase + string.digits):
@@ -47,16 +49,23 @@ def unique_slug_generator(instance, new_slug=None):
 
 
 def get_date_obj(date_value):
-        return datetime.datetime.strptime(date_value, '%d/%m/%Y %H:%M')
+        print(date_value)
+        try:
+            timestamp = datetime.datetime.strptime(date_value, '%d/%m/%Y %H:%M').timestamp()
+            datetime_obj = make_aware(datetime.datetime.fromtimestamp(timestamp))
+            error = False
+        except ValueError:
+            datetime_obj = parse_date(date_value)
+            error = True
+        return datetime_obj, error
 
-
-def format_datetime_obj(datetime_obj):
-    year = datetime_obj.year
-    month = datetime_obj.month
-    day = datetime_obj.day
-    hour = datetime_obj.hour
-    minute = datetime_obj.minute
-
-    datetime_str = datetime.datetime(year, month, day, hour, minute)
-
-    print(x.strftime("%b %d %Y %H:%M:%S"))
+# def format_datetime_obj(datetime_obj):
+#     year = datetime_obj.year
+#     month = datetime_obj.month
+#     day = datetime_obj.day
+#     hour = datetime_obj.hour
+#     minute = datetime_obj.minute
+#
+#     datetime_str = datetime.datetime(year, month, day, hour, minute)
+#
+#     print(x.strftime("%b %d %Y %H:%M:%S"))

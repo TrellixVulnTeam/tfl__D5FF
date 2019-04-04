@@ -54,6 +54,13 @@ class Cart(models.Model):
     def __str__(self):
         return str(self.id)
 
+    # def save(self, *args, **kwargs):
+    #     self.beginning = self.beginning.replace(tzinfo=None)
+    #     self.ending = self.ending.replace(tzinfo=None)
+    #     self.delivery = self.delivery.replace(tzinfo=None)
+    #     self.pickup = self.pickup.replace(tzinfo=None)
+    #     super(Cart, self).save(*args, **kwargs)
+
 
 def pre_save_cart_receiver(sender, instance, action, *args, **kwargs):
     if action == 'post_add' or action == 'post_remove' or action == 'post_clear':

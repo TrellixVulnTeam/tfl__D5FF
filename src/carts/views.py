@@ -134,17 +134,16 @@ def cart_field_change(request):
     field_name = request.POST.get('field_name')
     field_value = request.POST.get('field_value')
     date_field = request.POST.get('date_field')
-
+    error = None
     print(field_value)
 
     if date_field == '1':
-        field_value = utils.get_date_obj(field_value)
+        field_value, error = utils.get_date_obj(field_value)
 
-    cart_obj, new_obj = Cart.objects.new_or_get(request)
-
-    setattr(cart_obj, field_name, field_value)
-
-    cart_obj.save()
+    if error is False or error is None:
+        cart_obj, new_obj = Cart.objects.new_or_get(request)
+        setattr(cart_obj, field_name, field_value)
+        cart_obj.save()
 
     return JsonResponse({})
 
