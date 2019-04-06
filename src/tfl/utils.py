@@ -49,7 +49,6 @@ def unique_slug_generator(instance, new_slug=None):
 
 
 def get_date_obj(date_value):
-        print(date_value)
         try:
             timestamp = datetime.datetime.strptime(date_value, '%d/%m/%Y %H:%M').timestamp()
             datetime_obj = make_aware(datetime.datetime.fromtimestamp(timestamp))

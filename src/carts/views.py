@@ -135,7 +135,6 @@ def cart_field_change(request):
     field_value = request.POST.get('field_value')
     date_field = request.POST.get('date_field')
     error = None
-    print(field_value)
 
     if date_field == '1':
         field_value, error = utils.get_date_obj(field_value)
