@@ -21,8 +21,8 @@
                         <th scope="col">Status</th>
                         <th scope="col">Username</th>
                         <th scope="col">Created</th>
-                        <th scope="col">Order ID</th>
-                        <th scope="col"></th>
+{#                        <th scope="col">Order ID</th>#}
+{#                        <th scope="col"></th>#}
                     </tr>
                 </thead>
                 <tbody>
@@ -42,17 +42,17 @@
                         </td>
                         <td>{{ obj.cart.user.username }}</td>
                         <td>{{ obj.timestamp }}</td>
-                        <td>{{ obj.id }}</td>
-                        <td>
-                            {% if request.user.is_admin or request.user.is_staff %}
-                                {% if obj.status != 'confirm' and obj.status != 'canceled' %}
-                                    <form method="POST" action="{% url 'orders:confirm' %}" class="form" style="justify-content: center; display: flex;"> {% csrf_token %}
-                                        <input type="hidden" name="order_id" value="{{ obj.id }}" />
-                                        <button type="submit" style="border: None; background: None">Confirm<i class="fas fa-check-double"></i></button>
-                                    </form>
-                                {% endif %}
-                            {% endif %}
-                        </td>
+{#                        <td>{{ obj.id }}</td>#}
+{#                        <td>#}
+{#                            {% if request.user.is_admin or request.user.is_staff %}#}
+{#                                {% if obj.status != 'confirm' and obj.status != 'canceled' %}#}
+{#                                    <form method="POST" action="{% url 'orders:confirm' %}" class="form" style="justify-content: center; display: flex;"> {% csrf_token %}#}
+{#                                        <input type="hidden" name="order_id" value="{{ obj.id }}" />#}
+{#                                        <button type="submit" style="border: None; background: None">Confirm<i class="fas fa-check-double"></i></button>#}
+{#                                    </form>#}
+{#                                {% endif %}#}
+{#                            {% endif %}#}
+{#                        </td>#}
                     </tr>
                     {% endfor %}
                 </tbody>

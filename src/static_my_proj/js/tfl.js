@@ -52,3 +52,21 @@ function cart_product_remove(product_id) {
             }
       });
 }
+
+function confirm_order(order_id) {
+      //console.log("Order: "+order_id);
+
+      $.ajax({
+            type: 'POST',
+            url: 'confirm/',
+            data: {
+                  'order_id': order_id
+            },
+            dataType: 'json',
+            success: function (data) {
+                  if (data) {
+                        window.location.reload();
+                  }
+            }
+      });
+}

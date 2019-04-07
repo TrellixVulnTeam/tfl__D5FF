@@ -11,5 +11,6 @@ app_name = 'orders'
 urlpatterns = [
     path('', AllOrdersView.as_view(), name='home'),
     path('<slug:id>/', OrderDetailView.as_view(), name='detail'),
-    path('confirm/', order_confirm, name='confirm'),
+    path('<slug:id>/confirm/', order_confirm, name='confirm'),
+    # path('confirm/', order_confirm, name='confirm'),
 ]

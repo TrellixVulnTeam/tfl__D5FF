@@ -1,7 +1,9 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView, DetailView
 from django.shortcuts import redirect
-from django.http import Http404
+from django.http import Http404, JsonResponse
+
 
 from .models import Order
 
@@ -65,16 +67,17 @@ class OrderDetailView(DetailView):
         return instance
 
 
-def order_confirm(request):
-    order_id = request.POST.get('order_id')
+@csrf_exempt
+def order_confirm(request, id):
+    #order_id = request.POST.get('order_id')
+    order_id = id
     if order_id is not None:
         try:
             order_obj = Order.objects.get(id=order_id)
+            if order_obj.status != 'confirm' and order_obj.status != 'canceled':
+                order_obj.status = 'confirm'
+                order_obj.save()
         except Order.DoesNotExist:
             return redirect('orders:home')
-
-        if order_obj.status != 'confirm' and order_obj.status != 'canceled':
-            order_obj.status = 'confirm'
-            order_obj.save()
-
-    return redirect('orders:home')
+    return JsonResponse({})
+    # return redirect('orders:home')

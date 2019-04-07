@@ -69,7 +69,11 @@
               <input type="text" class="form-control" id="validationDefaultUsername" disabled="true" value="{{ object.cart.phone }}">
             </div>
             {% if request.user.is_staff %}
+                {% if object.status != 'confirm' and object.status != 'canceled' %}
+                    <button type="button" class="btn btn-info" onclick="confirm_order({{ object.id }})">Confirm</button>
+                {% endif %}
                 <button type="button" class="btn btn-info">Edit</button>
+                <button type="button" class="btn btn-info">Cancel</button>
             {% endif %}
 
       </div>
