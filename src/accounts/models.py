@@ -14,6 +14,7 @@ from django.template.loader import get_template
 from django.utils import timezone
 
 from tfl.utils import unique_key_generator
+from companies.models import Company
 
 DEFAULT_ACTIVATION_DAYS = getattr(settings, 'DEFAULT_ACTIVATION_DAYS', 7)
 
@@ -90,6 +91,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     personal_name = models.CharField(max_length=255, blank=True, null=True)
     address = models.CharField(max_length=255, blank=True, null=True)
     phone = models.CharField(max_length=255, blank=True, null=True)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, default=1, null=True, blank=True)
     is_active = models.BooleanField(default=False)
     staff = models.BooleanField(default=False)
     admin = models.BooleanField(default=False)

@@ -6,6 +6,9 @@ from django.utils.text import slugify
 from django.utils.dateparse import parse_date
 from django.utils.timezone import make_aware
 
+from companies.models import Company
+from django.forms.models import model_to_dict
+
 
 def random_string_generator(size=10, chars=string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
@@ -68,3 +71,32 @@ def get_date_obj(date_value):
 #     datetime_str = datetime.datetime(year, month, day, hour, minute)
 #
 #     print(x.strftime("%b %d %Y %H:%M:%S"))
+
+
+def generate_menu(user):
+    data = {
+        'companies_menu': []
+    }
+    if user.is_authenticated:
+        print(user.is_admin)
+        print(user.is_staff)
+        if user.is_admin or user.is_staff:
+            all_companies = Company.objects.all()
+            print(all_companies)
+            for c in all_companies:
+                company = {
+                    'id': c.id,
+                    'name': c.name
+                }
+                data['companies_menu'].append(company)
+        else:
+            print(user.company)
+            company = {
+                'id': user.company.id,
+                'name': user.company.name
+            }
+            data['companies_menu'].append(company)
+        return data
+    else:
+        return data
+
