@@ -59,6 +59,9 @@ class ProductQuerySet(models.query.QuerySet):
     def active(self):
         return self.filter(active=True).order_by('-timestamp')
 
+    def get_by_company(self, id_company):
+        return self.filter(Q(company=id_company)).order_by('-timestamp')
+
     def search_cq(self, category, query):
         lookups = ((Q(title__icontains=query) |
                    Q(description__icontains=query) |
@@ -84,14 +87,25 @@ class ProductManager(models.Manager):
     def get_queryset(self):
         return ProductQuerySet(self.model, using=self._db)
 
-    def all(self):
-        return self.get_queryset().active()
+    def all(self, user):
+        # if user.is_authenticated:
+            if user.is_staff or user.is_admin:
+                return self.get_queryset().active()
+            else:
+                return self.get_by_company(id_company=user.company, user=user)
+        # return None
 
     def get_by_id(self, id):
         qs = self.get_queryset().filter(id=id)
         if qs.count() == 1:
             return qs.first()
         return None
+
+    def get_by_company(self, id_company, user):
+        if user.is_staff or user.is_admin:
+            return self.get_queryset().active().get_by_company(id_company=id_company)
+        else:
+            return self.get_queryset().active().get_by_company(id_company=user.company)
 
     def search(self, category, query):
         if category and query:

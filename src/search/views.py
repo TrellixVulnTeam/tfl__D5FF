@@ -18,10 +18,11 @@ class SearchProductView(ListView):
 
     def get_queryset(self, *args, **kwargs):
         request = self.request
+        user = self.request.user
         query = request.GET.get('q')
         category = request.GET.get('c')
-        print(query)
+
         if not query and not category:
-            return Product.objects.all()
+            return Product.objects.all(user)
         else:
             return Product.objects.search(category, query)

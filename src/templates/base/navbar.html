@@ -34,12 +34,12 @@
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 {% for cm in  companies_menu  %}
-                    <a class="dropdown-item" href="#">{{ cm.name }}</a>
+                    <a class="dropdown-item" href="{% url 'products:company_products' cm.id %}">{{ cm.name }}</a>
                 {% endfor %}
                 {% if companies_menu %}
                     <div class="dropdown-divider"></div>
                 {% endif %}
-              <a class="dropdown-item" href="{{product_list_url}}">All Products</a>
+              <a class="dropdown-item" href="{{ product_list_url }}" id="000">All Products</a>
             </div>
           </li>
           {% if request.user.is_authenticated %}
@@ -78,7 +78,7 @@
           {% if request.user.is_authenticated %}
           <li class="nav-item {% if request.path == cart_url %}active{% endif %}">
             <a class="nav-link" href="{{ cart_url }}">
-              <span class="badge badge-dark">{{request.session.cart_items|default:0}}</span>
+              <span class="badge badge-dark" id="cart_count">{{request.session.cart_items|default:0}}</span>
               <i class="fas fa-shopping-cart"></i>
             </a>
           </li>

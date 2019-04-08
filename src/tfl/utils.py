@@ -78,11 +78,8 @@ def generate_menu(user):
         'companies_menu': []
     }
     if user.is_authenticated:
-        print(user.is_admin)
-        print(user.is_staff)
         if user.is_admin or user.is_staff:
             all_companies = Company.objects.all()
-            print(all_companies)
             for c in all_companies:
                 company = {
                     'id': c.id,
@@ -90,7 +87,6 @@ def generate_menu(user):
                 }
                 data['companies_menu'].append(company)
         else:
-            print(user.company)
             company = {
                 'id': user.company.id,
                 'name': user.company.name

@@ -4,7 +4,7 @@ from .models import Company
 
 
 class CompanyAdmin(admin.ModelAdmin):
-    list_display = ['__str__']
+    list_display = ['id', '__str__']
 
     class Meta:
         model = Company

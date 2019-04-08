@@ -1,9 +1,11 @@
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView, DetailView, CreateView
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 
-from .models import Product, ProductCategory
+from carts.models import Cart
+from .models import Product, ProductCategory, CartProduct
 from .forms import ProductForm
 
 
@@ -13,12 +15,19 @@ class ProductListView(ListView):
     paginate_by = 12
 
     def get_queryset(self, *args, **kwargs):
-        # request = self.request
-        return Product.objects.all()
+        user = self.request.user
+        id = self.kwargs.get('company')
+
+        if id is not None:
+            return Product.objects.get_by_company(id_company=id, user=user)
+        return Product.objects.all(user)
 
     def get_context_data(self, *args, **kwargs):
         context = super(ProductListView, self).get_context_data(*args, **kwargs)
-        p = Paginator(Product.objects.select_related().all(), self.paginate_by)
+        products = self.get_queryset(*args, **kwargs)
+
+        # p = Paginator(Product.objects.select_related().all(), self.paginate_by)
+        p = Paginator(products, self.paginate_by)
         context['products'] = p.page(context['page_obj'].number)
         all_categories = ProductCategory.objects.all()
         context['all_categories'] = all_categories
@@ -80,3 +89,29 @@ class ProductAddView(LoginRequiredMixin, CreateView):
     template_name = 'products/add.html'
 
     model = Product
+
+
+@csrf_exempt
+def cart_add(request):
+    product_id = request.POST.get('product_id')
+    data = {
+        'refresh': 'false'
+    }
+    if product_id is not None:
+            product_obj = Product.objects.get(id=product_id)
+            cart_obj, new_obj = Cart.objects.new_or_get(request)
+            find = False
+            for p in cart_obj.products.all():
+                if p.product == product_obj:
+                    find = True
+            if not find:
+                cart_product = CartProduct.objects.new(product=product_obj)
+                cart_obj.products.add(cart_product)
+                cart_count = cart_obj.products.count()
+                request.session['cart_items'] = cart_count
+                data = {
+                    'cart_count': cart_count,
+                    'refresh': 'true'
+                }
+
+    return JsonResponse(data)

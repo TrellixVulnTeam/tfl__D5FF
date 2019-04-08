@@ -62,24 +62,23 @@ class CartView(LoginRequiredMixin, NextUrlMixin, UpdateView):
 #     }
 #     return render(request, 'carts/home.html', context)
 
-
-def cart_add(request):
-    product_id = request.POST.get('product_id')
-    if product_id is not None:
-        try:
-            product_obj = Product.objects.get(id=product_id)
-        except Product.DoesNotExist:
-            return redirect('cart:home')
-        cart_obj, new_obj = Cart.objects.new_or_get(request)
-        find = False
-        for p in cart_obj.products.all():
-            if p.product == product_obj:
-                find = True
-        if not find:
-            cart_product = CartProduct.objects.new(product=product_obj)
-            cart_obj.products.add(cart_product)
-        request.session['cart_items'] = cart_obj.products.count()
-    return redirect('cart:home')
+# def cart_add(request):
+#     product_id = request.POST.get('product_id')
+#     if product_id is not None:
+#         try:
+#             product_obj = Product.objects.get(id=product_id)
+#         except Product.DoesNotExist:
+#             return redirect('cart:home')
+#         cart_obj, new_obj = Cart.objects.new_or_get(request)
+#         find = False
+#         for p in cart_obj.products.all():
+#             if p.product == product_obj:
+#                 find = True
+#         if not find:
+#             cart_product = CartProduct.objects.new(product=product_obj)
+#             cart_obj.products.add(cart_product)
+#         request.session['cart_items'] = cart_obj.products.count()
+#     return redirect('cart:home')
 
 
 # def cart_remove(request):

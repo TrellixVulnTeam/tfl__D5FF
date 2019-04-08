@@ -1,3 +1,19 @@
+function add_to_cart(product_id) {
+      $.ajax({
+            type: 'POST',
+            url: 'cart/add/',
+            data: {
+                  'product_id': product_id
+            },
+            dataType: 'json',
+            success: function (data) {
+                  if (data.refresh === 'true') {
+                        document.getElementById('cart_count').innerHTML = data.cart_count;
+                  }
+            }
+      });
+}
+
 //Function for validate quantity
 function validate_quantity(product_id, product_quantity) {
       $.ajax({
