@@ -41,6 +41,12 @@ class UserDetailChangeForm(forms.ModelForm):
                                            'placeholder': 'Username',
                                            }
                                     ), label='', disabled=True)
+    company = forms.CharField(widget=forms.TextInput(
+                                    attrs={'class': 'form-control mb-1',
+                                           'id': 'inputCompany',
+                                           'placeholder': 'Company',
+                                           }
+                                ), label='', disabled=True)
     personal_name = forms.CharField(widget=forms.TextInput(
                                         attrs={'class': 'form-control mb-1',
                                                'id': 'inputPersonalName',
@@ -62,7 +68,15 @@ class UserDetailChangeForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('email', 'username', 'personal_name', 'address', 'phone',)
+        fields = ('email', 'username', 'company', 'personal_name', 'address', 'phone',)
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs['instance']
+        company_name = user.company.name
+        kwargs.update(initial={
+            'company': company_name
+        })
+        super().__init__(*args, **kwargs)
 
 
 class LoginForm(forms.Form):

@@ -29,7 +29,7 @@
                 {% for obj in object_list %}
                 <tr>
                     <th scope="row">{{ forloop.counter }}</th>
-                    <td>{{ obj.email }}</td>
+                    <td><a href="{{ obj.get_absolute_url }}"> {{ obj.email }} </a></td>
                     <td>{{ obj.username }}</td>
                     <td>{{ obj.personal_name }}</td>
                     <td>

@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.urls import reverse
 from django.views.generic import CreateView, FormView, DetailView, View, UpdateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -86,11 +87,30 @@ class UserDetailUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'accounts/detail_update_view.html'
 
     def get_object(self, queryset=None):
-        return self.request.user
+        user = self.request.user
+        xid = self.kwargs.get('id')
 
-    def get_success_url(self):
+        if xid is not None:
+            try:
+                user = User.objects.get(id=xid)
+            except User.DoesNotExist:
+                raise Http404("User doesn't exist!")
+
+        return user
+
+    def get_success_url(self, **kwargs):
         messages.success(self.request, 'Change successful!')
-        return reverse('account:home')
+        xid = self.kwargs.get('id')
+        succ_url = 'account:home'
+
+        if xid is not None:
+            succ_url = 'account:user_detail'
+            if kwargs != None:
+                return reverse(succ_url, kwargs={'id': xid})
+            else:
+                return reverse(succ_url, args=(xid,))
+
+        return reverse(succ_url)
 
 
 class AllUsersView(LoginRequiredMixin, ListView):

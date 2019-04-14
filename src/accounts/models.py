@@ -28,6 +28,9 @@ class UserManager(BaseUserManager):
     def get_queryset(self):
         return UserQuerySet(self.model, using=self._db)
 
+    def get_user_by_id(self, user_id):
+        return self.get_queryset().filter(id=user_id)
+
     def create_user(self, username, email, personal_name=None, address=None, phone=None, password=None, is_active=False, is_staff=False, is_admin=False):
         if not email:
             raise ValueError('Users must have an email address')
@@ -111,6 +114,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def has_module_perms(self, app_label):
         return self.admin
+
+    def get_absolute_url(self):
+        return reverse('account:user_detail', kwargs={'id': self.id})
 
     @property
     def is_staff(self):
