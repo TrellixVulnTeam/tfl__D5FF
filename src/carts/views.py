@@ -10,6 +10,7 @@ from products.models import Product, CartProduct
 from .models import Cart
 from .forms import CartForm
 from orders.models import Order
+from companies.models import Company
 from tfl.mixins import NextUrlMixin
 from tfl import utils
 
@@ -105,26 +106,29 @@ def checkout_home(request):
 
         return redirect('cart:home')
     else:
-        if request.method == 'POST':
-            form = CartForm(request.POST)
-            if form.is_valid():
-                cart_obj.manifestation = form.cleaned_data.get('manifestation')
-                cart_obj.address = form.cleaned_data.get('address')
-                cart_obj.beginning = form.cleaned_data.get('beginning')
-                cart_obj.ending = form.cleaned_data.get('ending')
-                cart_obj.delivery = form.cleaned_data.get('delivery')
-                cart_obj.pickup = form.cleaned_data.get('pickup')
-                cart_obj.personal_name = form.cleaned_data.get('personal_name')
-                cart_obj.email = form.cleaned_data.get('email')
-                cart_obj.phone = form.cleaned_data.get('phone')
-                cart_obj.save()
-        else:
-            form = CartForm()
+        # if request.method == 'POST':
+        #     form = CartForm(request.POST)
+        #     if form.is_valid():
+        #         cart_obj.manifestation = form.cleaned_data.get('manifestation')
+        #         cart_obj.address = form.cleaned_data.get('address')
+        #         cart_obj.beginning = form.cleaned_data.get('beginning')
+        #         cart_obj.ending = form.cleaned_data.get('ending')
+        #         cart_obj.delivery = form.cleaned_data.get('delivery')
+        #         cart_obj.pickup = form.cleaned_data.get('pickup')
+        #         cart_obj.personal_name = form.cleaned_data.get('personal_name')
+        #         cart_obj.email = form.cleaned_data.get('email')
+        #         cart_obj.phone = form.cleaned_data.get('phone')
+        #         cart_obj.save()
+        # else:
+        #     form = CartForm()
 
+        # old_order_id = request.session.get('order_id')
+        # if old_order_id is not None:
+        #     old_order_obj = Order.objects.get(id=old_order_id)
+        #     old_order_obj.deactivate()
         order_obj, new_order_obj = Order.objects.get_or_create(cart=cart_obj)
         request.session['cart_id'] = None
         request.session['cart_items'] = 0
-    # return render(request, 'carts/checkout.html', {'object': order_obj})
     return redirect('orders:home')
 
 
@@ -142,6 +146,17 @@ def cart_field_change(request):
         cart_obj, new_obj = Cart.objects.new_or_get(request)
         setattr(cart_obj, field_name, field_value)
         cart_obj.save()
+
+    return JsonResponse({})
+
+
+@csrf_exempt
+def set_company(request):
+    company_id = request.POST.get('company_id')
+    company_obj = Company.objects.get_by_id(company_id)
+    cart_obj, new_obj = Cart.objects.new_or_get(request)
+    setattr(cart_obj, 'company', company_obj)
+    cart_obj.save()
 
     return JsonResponse({})
 

@@ -4,6 +4,7 @@ from django import forms
 from tempus_dominus.widgets import DateTimePicker
 
 from .models import Cart
+from companies.models import Company
 
 
 class CartForm(forms.ModelForm):
@@ -117,6 +118,8 @@ class CartForm(forms.ModelForm):
                                        }
                                 ), label='')
 
+    company = forms.ModelChoiceField(queryset=Company.objects.all(), empty_label='Company', label='')
+
     class Meta:
         model = Cart
         fields = ('manifestation',
@@ -127,8 +130,18 @@ class CartForm(forms.ModelForm):
                   'pickup',
                   'personal_name',
                   'email',
-                  'phone'
+                  'phone',
+                  'company'
                   )
+
+    def __init__(self, *args, **kwargs):
+        cart = kwargs['instance']
+        user = cart.user
+        if not user.is_admin and not user.is_staff:
+            super().__init__(*args, **kwargs)
+            self.fields['company'].disabled = True
+        else:
+            super().__init__(*args, **kwargs)
 
     def clean_beginning(self):
         beginning = self.cleaned_data.get('beginning')

@@ -52,6 +52,21 @@ function cart_field_change(field_name, field_value, date_field) {
       });
 }
 
+
+function set_company(company_id){
+      $.ajax({
+            type: 'POST',
+            url: 'set_company/',
+            data: {
+                  'company_id': company_id
+            },
+            dataType: 'json',
+            success: function (data) {
+
+            }
+      });
+}
+
 function cart_product_remove(product_id) {
       //console.log(cart_id+"-"+product_id);
       $.ajax({
@@ -82,6 +97,24 @@ function confirm_order(order_id) {
             success: function (data) {
                   if (data) {
                         window.location.reload();
+                  }
+            }
+      });
+}
+
+function order_edit(cart_id) {
+      //console.log("Order: "+order_id);
+
+      $.ajax({
+            type: 'POST',
+            url: 'edit_order/',
+            /*data: {
+                  'cart_id': cart_id
+            },
+            dataType: 'json',*/
+            success: function (data) {
+                  if (data['refresh'] == 'true') {
+                        window.location.href = 'http://localhost:8000/cart/';
                   }
             }
       });

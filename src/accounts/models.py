@@ -94,7 +94,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     personal_name = models.CharField(max_length=255, blank=True, null=True)
     address = models.CharField(max_length=255, blank=True, null=True)
     phone = models.CharField(max_length=255, blank=True, null=True)
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, default=1, null=True, blank=True)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=True)
     is_active = models.BooleanField(default=False)
     staff = models.BooleanField(default=False)
     admin = models.BooleanField(default=False)
@@ -125,6 +125,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     @property
     def is_admin(self):
         return self.admin
+
+    @property
+    def have_company(self):
+        if self.company is not None:
+            return True
+        return False
 
     # @property
     # def is_active(self):

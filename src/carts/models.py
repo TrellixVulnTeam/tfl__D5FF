@@ -4,6 +4,7 @@ from django.db.models.signals import pre_save, post_save, m2m_changed
 
 
 from products.models import CartProduct
+from companies.models import Company
 
 User = settings.AUTH_USER_MODEL
 
@@ -29,7 +30,8 @@ class CartManager(models.Manager):
         if user is not None:
             if user.is_authenticated:
                 user_obj = user
-        return self.model.objects.create(user=user_obj)
+                company = user.company
+        return self.model.objects.create(user=user_obj, company=company)
 
 
 class Cart(models.Model):
@@ -48,6 +50,8 @@ class Cart(models.Model):
     total_weight = models.DecimalField(default=0.00, max_digits=100, decimal_places=2)
     updated = models.DateTimeField(auto_now=True)
     timestamp = models.DateTimeField(auto_now_add=True)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, null=False, blank=False, default=4)
+    # Potrebno je dodati polje kompanije jer ce postojati mogucnost da se napravi porudzbina sa korisnikom koji nije iz kompanije za koju se pravi porudzbina
 
     objects = CartManager()
 

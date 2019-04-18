@@ -74,5 +74,16 @@
             </div>
 
     </div>
+    <!-- Dodaje klase na padajucu listu -->
+        <script>
+            $(document).ready(function () {
+                $('#id_company').attr('class', 'form-control mb-1 custom-select');
+                $('#id_company').on('change', function () {
+                    var value = $('#id_company').val();
+
+                    set_company(value)
+                })
+            });
+        </script>
 
 {% endblock %}

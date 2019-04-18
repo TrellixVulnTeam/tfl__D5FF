@@ -3,6 +3,8 @@ import datetime
 from django import forms
 from tempus_dominus.widgets import DateTimePicker
 
+from companies.models import Company
+
 
 class OrderForm(forms.Form):
     manifestation = forms.CharField(widget=forms.TextInput(
@@ -96,6 +98,8 @@ class OrderForm(forms.Form):
                                        'placeholder': 'Phone number',
                                        }
                                 ), label='', disabled=True)
+
+    company = forms.ModelChoiceField(queryset=Company.objects.all(), empty_label='Company', label='', disabled=True)
 
     # class Meta:
     #     model = Cart

@@ -26,6 +26,12 @@ class OrderQuerySet(models.query.QuerySet):
                    )
         return self.filter(lookups).order_by('-timestamp')
 
+    def company_orders(self, company):
+        lookups = (Q(cart__company=company) &
+                   Q(active=True)
+                   )
+        return self.filter(lookups).order_by('-timestamp')
+
 
 class OrderManager(models.Manager):
     def get_queryset(self):
@@ -34,11 +40,15 @@ class OrderManager(models.Manager):
     def my_orders(self, user):
         return self.get_queryset().my_orders(user)
 
+    def company_orders(self, user):
+        company = user.company
+        return self.get_queryset().company_orders(company)
+
     def all(self, user):
         if user.is_staff or user.is_admin:
             return self.get_queryset().all()
         else:
-            return self.my_orders(user)
+            return self.company_orders(user)
 
 
 class Order(models.Model):
@@ -63,6 +73,10 @@ class Order(models.Model):
     def update_total(self):
         self.total_price = self.cart.total_price
         self.total_weight = self.cart.total_weight
+        self.save()
+
+    def deactivate(self):
+        self.active = False
         self.save()
 
 

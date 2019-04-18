@@ -69,15 +69,35 @@ class OrderDetailView(DetailView):
 
 @csrf_exempt
 def order_confirm(request, id):
-    #order_id = request.POST.get('order_id')
-    order_id = id
-    if order_id is not None:
-        try:
-            order_obj = Order.objects.get(id=order_id)
-            if order_obj.status != 'confirm' and order_obj.status != 'canceled':
-                order_obj.status = 'confirm'
-                order_obj.save()
-        except Order.DoesNotExist:
-            return redirect('orders:home')
+    user = request.user
+    if user.is_authenticated and (user.is_staff or user.is_admin):
+        order_id = id
+        if order_id is not None:
+            try:
+                order_obj = Order.objects.get(id=order_id)
+                if order_obj.status != 'confirm' and order_obj.status != 'canceled':
+                    order_obj.status = 'confirm'
+                    order_obj.save()
+            except Order.DoesNotExist:
+                return redirect('orders:home')
     return JsonResponse({})
     # return redirect('orders:home')
+
+
+@csrf_exempt
+def order_edit(request, id):
+    user = request.user
+    data = {}
+    if user.is_authenticated:
+        try:
+            order_obj = Order.objects.get(id=id)
+            cart_obj = order_obj.cart
+            request.session['cart_id'] = cart_obj.id
+            request.session['cart_items'] = cart_obj.products.count()
+
+            data = {
+                'refresh': 'true'
+            }
+        except Order.DoesNotExist:
+            return redirect('orders:home')
+    return JsonResponse(data)

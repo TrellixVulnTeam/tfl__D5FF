@@ -68,11 +68,17 @@
               </div>
               <input type="text" class="form-control" id="validationDefaultUsername" disabled="true" value="{{ object.cart.phone }}">
             </div>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                  <span class="input-group-text" id="inputGroupPrepend2" style="width: 120px">Company</span>
+              </div>
+              <input type="text" class="form-control" id="validationDefaultUsername" disabled="true" value="{{ object.cart.company }}">
+            </div>
             {% if request.user.is_staff %}
                 {% if object.status != 'confirm' and object.status != 'canceled' %}
                     <button type="button" class="btn btn-info" onclick="confirm_order({{ object.id }})">Confirm</button>
                 {% endif %}
-                <button type="button" class="btn btn-info">Edit</button>
+                <button type="button" class="btn btn-info" onclick="order_edit({{ object.cart.id }})">Edit</button>
                 <button type="button" class="btn btn-info">Cancel</button>
             {% endif %}
 

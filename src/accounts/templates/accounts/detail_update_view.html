@@ -13,4 +13,10 @@
       {{ form.as_p }}
       <button class="btn btn-lg btn-dark btn-block" type="submit">Save</button>
     </form>
+    <!-- Dodaje klase na padajucu listu -->
+        <script>
+            $(document).ready(function () {
+                $('#id_company').attr('class', 'form-control mb-1 custom-select')
+            });
+        </script>
 {% endblock %}

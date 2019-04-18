@@ -5,6 +5,7 @@ from django.utils.safestring import mark_safe
 
 from .signals import user_logged_in
 from .models import UsernameActivation
+from companies.models import Company
 
 User = get_user_model()
 
@@ -41,12 +42,13 @@ class UserDetailChangeForm(forms.ModelForm):
                                            'placeholder': 'Username',
                                            }
                                     ), label='', disabled=True)
-    company = forms.CharField(widget=forms.TextInput(
-                                    attrs={'class': 'form-control mb-1',
-                                           'id': 'inputCompany',
-                                           'placeholder': 'Company',
-                                           }
-                                ), label='', disabled=True)
+    # company = forms.CharField(widget=forms.TextInput(
+    #                                 attrs={'class': 'form-control mb-1',
+    #                                        'id': 'inputCompany',
+    #                                        'placeholder': 'Company',
+    #                                        }
+    #                             ), label='', disabled=True)
+    company = forms.ModelChoiceField(queryset=Company.objects.all(), empty_label='Company', label='', disabled=False)
     personal_name = forms.CharField(widget=forms.TextInput(
                                         attrs={'class': 'form-control mb-1',
                                                'id': 'inputPersonalName',
@@ -70,13 +72,26 @@ class UserDetailChangeForm(forms.ModelForm):
         model = User
         fields = ('email', 'username', 'company', 'personal_name', 'address', 'phone',)
 
+    # def __init__(self, *args, **kwargs):
+    #     user = kwargs['instance']
+    #     print(user.company)
+    #     if user.company is not None:
+    #         company_name = user.company.name
+    #         kwargs.update(initial={
+    #             'company': company_name
+    #         })
+    #         super().__init__(*args, **kwargs)
+    #     else:
+    #         super().__init__(*args, **kwargs)
+    #         # self.fields['company'].disabled = False
+    #         # self.fields['company']
     def __init__(self, *args, **kwargs):
         user = kwargs['instance']
-        company_name = user.company.name
-        kwargs.update(initial={
-            'company': company_name
-        })
-        super().__init__(*args, **kwargs)
+        if user.company is not None:
+            super().__init__(*args, **kwargs)
+            self.fields['company'].disabled = True
+        else:
+            super().__init__(*args, **kwargs)
 
 
 class LoginForm(forms.Form):
