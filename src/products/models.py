@@ -56,8 +56,9 @@ class ProductCategory(models.Model):
 
 
 class ProductQuerySet(models.query.QuerySet):
-    def active(self):
-        return self.filter(active=True).order_by('-timestamp')
+    def all(self, companies_ids):
+        print(companies_ids)
+        return self.filter(company__in=companies_ids).filter(active=True).order_by('-timestamp')
 
     def get_by_company(self, id_company):
         return self.filter(Q(company=id_company)).order_by('-timestamp')
@@ -87,12 +88,12 @@ class ProductManager(models.Manager):
     def get_queryset(self):
         return ProductQuerySet(self.model, using=self._db)
 
-    def all(self, user):
+    def all(self, user, companies_ids):
         # if user.is_authenticated:
-            if user.is_staff or user.is_admin:
-                return self.get_queryset().active()
-            else:
-                return self.get_by_company(id_company=user.company, user=user)
+        #     if user.is_staff or user.is_admin:
+                return self.get_queryset().all(companies_ids)
+            # else:
+            #     return self.get_by_company(id_company=user.company, user=user)
         # return None
 
     def get_by_id(self, id):
@@ -101,19 +102,21 @@ class ProductManager(models.Manager):
             return qs.first()
         return None
 
+    # def get_by_company(self, id_company, user):
+    #     if user.is_staff or user.is_admin:
+    #         return self.get_queryset().active().get_by_company(id_company=id_company)
+    #     else:
+    #         return self.get_queryset().active().get_by_company(id_company=user.company)
     def get_by_company(self, id_company, user):
-        if user.is_staff or user.is_admin:
-            return self.get_queryset().active().get_by_company(id_company=id_company)
-        else:
-            return self.get_queryset().active().get_by_company(id_company=user.company)
+        return self.get_queryset().get_by_company(id_company=id_company)
 
-    def search(self, category, query):
+    def search(self, category, query, companies_ids):
         if category and query:
-            return self.get_queryset().active().search_cq(category, query)
+            return self.get_queryset().all(companies_ids).search_cq(category, query)
         elif category:
-            return self.get_queryset().active().search_c(category)
+            return self.get_queryset().all(companies_ids).search_c(category)
         else:
-            return self.get_queryset().active().search_q(query)
+            return self.get_queryset().all(companies_ids).search_q(query)
 
 
 class Product(models.Model):

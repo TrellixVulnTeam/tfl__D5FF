@@ -74,6 +74,10 @@ def get_date_obj(date_value):
 
 
 def generate_menu(user):
+    tfl_company = {
+        'id': 4,
+        'name': 'TFL'
+    }
     data = {
         'companies_menu': []
     }
@@ -86,13 +90,17 @@ def generate_menu(user):
                     'name': c.name
                 }
                 data['companies_menu'].append(company)
-        else:
+        elif user.have_company:
             company = {
                 'id': user.company.id,
                 'name': user.company.name
             }
             data['companies_menu'].append(company)
+            data['companies_menu'].append(tfl_company)
+        else:
+            data['companies_menu'].append(tfl_company)
         return data
     else:
+        data['companies_menu'].append(tfl_company)
         return data
 

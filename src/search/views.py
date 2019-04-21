@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from django.views.generic import ListView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from products.models import Product, ProductCategory
 
 
-class SearchProductView(ListView):
+class SearchProductView(LoginRequiredMixin, ListView):
     template_name = "search/view.html"
 
     def get_context_data(self, *args, **kwargs):
@@ -18,11 +19,16 @@ class SearchProductView(ListView):
 
     def get_queryset(self, *args, **kwargs):
         request = self.request
-        user = self.request.user
+        user = request.user
         query = request.GET.get('q')
         category = request.GET.get('c')
 
+        companies_menu = request.session['companies_menu']
+        companies_ids = []
+        for c in companies_menu:
+            companies_ids.append(c['id'])
+        print(self.request.GET)
         if not query and not category:
             return Product.objects.all(user)
         else:
-            return Product.objects.search(category, query)
+            return Product.objects.search(category, query, companies_ids)

@@ -50,8 +50,7 @@ class Cart(models.Model):
     total_weight = models.DecimalField(default=0.00, max_digits=100, decimal_places=2)
     updated = models.DateTimeField(auto_now=True)
     timestamp = models.DateTimeField(auto_now_add=True)
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, null=False, blank=False, default=4)
-    # Potrebno je dodati polje kompanije jer ce postojati mogucnost da se napravi porudzbina sa korisnikom koji nije iz kompanije za koju se pravi porudzbina
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=True, default=4)
 
     objects = CartManager()
 

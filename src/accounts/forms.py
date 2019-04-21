@@ -87,11 +87,9 @@ class UserDetailChangeForm(forms.ModelForm):
     #         # self.fields['company']
     def __init__(self, *args, **kwargs):
         user = kwargs['instance']
+        super().__init__(*args, **kwargs)
         if user.company is not None:
-            super().__init__(*args, **kwargs)
             self.fields['company'].disabled = True
-        else:
-            super().__init__(*args, **kwargs)
 
 
 class LoginForm(forms.Form):

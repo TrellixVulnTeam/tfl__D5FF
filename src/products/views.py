@@ -18,9 +18,18 @@ class ProductListView(ListView):
         user = self.request.user
         id = self.kwargs.get('company')
 
-        if id is not None:
+        companies_menu = self.request.session['companies_menu']
+        companies_ids = []
+        found = False
+        for c in companies_menu:
+            if c['id'] == id:
+                found = True
+            companies_ids.append(c['id'])
+
+        if id is not None and found:
             return Product.objects.get_by_company(id_company=id, user=user)
-        return Product.objects.all(user)
+        print(companies_ids)
+        return Product.objects.all(user, companies_ids)
 
     def get_context_data(self, *args, **kwargs):
         context = super(ProductListView, self).get_context_data(*args, **kwargs)
