@@ -1,5 +1,7 @@
+from django.contrib import messages
+from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.http import Http404, JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
@@ -91,6 +93,37 @@ class ProductDetailView(DetailView):
         except:
             raise Http404("Uhhh")
         return instance
+
+
+class ProductDetailUpdateView(LoginRequiredMixin, UpdateView):
+    form_class = ProductForm
+    template_name = 'products/add.html'
+
+    def get_object(self, queryset=None):
+        user = self.request.user
+        product_slug = self.kwargs.get('slug')
+
+        if user.is_staff or user.is_admin:
+            if product_slug is not None:
+                try:
+                    product = Product.objects.get(slug=product_slug)
+                    return product
+                except Product.DoesNotExist:
+                    raise Http404("Product doesn't exist!")
+
+    def get_success_url(self, **kwargs):
+        messages.success(self.request, 'Change successful!')
+        product_slug = self.kwargs.get('slug')
+        succ_url = 'products:detail'
+
+        if product_slug is not None:
+            succ_url = 'products:edit'
+            if kwargs is not None:
+                return reverse(succ_url, kwargs={'slug': product_slug})
+            else:
+                return reverse(succ_url, args=(product_slug,))
+
+        return reverse(succ_url)
 
 
 class ProductAddView(LoginRequiredMixin, CreateView):

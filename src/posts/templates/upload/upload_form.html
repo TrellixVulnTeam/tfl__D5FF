@@ -1,6 +1,7 @@
 <div class="custom-file col-sm-6">
-  <input required="{{ widget.is_required }}" type="{{ widget.type }}" name="{{ widget.name }}" value="{{ widget.value }}" accept="image/*" class="custom-file-input" id="customFile">
-  <label id="fileLabel" class="custom-file-label" for="customFile">Choose image</label>
+{#  <input required="{{ widget.is_required }}" type="{{ widget.type }}" name="{{ widget.name }}" value="{{ widget.value }}" accept="image/*" class="custom-file-input" id="customFile">#}
+  <input type="{{ widget.type }}" name="{{ widget.name }}" value="{{ widget.value }}" accept="image/*" class="custom-file-input" id="customFile">
+  <label id="fileLabel" class="custom-file-label" for="customFile">{{widget.value |default:"Choose image"}}</label>
 </div>
 <script>
     document.getElementById("customFile").onchange = function () {

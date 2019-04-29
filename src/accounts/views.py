@@ -105,7 +105,7 @@ class UserDetailUpdateView(LoginRequiredMixin, UpdateView):
 
         if xid is not None:
             succ_url = 'account:user_detail'
-            if kwargs != None:
+            if kwargs is not None:
                 return reverse(succ_url, kwargs={'id': xid})
             else:
                 return reverse(succ_url, args=(xid,))

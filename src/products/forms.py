@@ -7,7 +7,7 @@ from tfl.forms import MyImageWidget
 
 
 class ProductForm(forms.ModelForm):
-    image = forms.ImageField(widget=MyImageWidget, label='')
+    image = forms.ImageField(widget=MyImageWidget, label='', required=False)
     title = forms.CharField(widget=forms.TextInput(
         attrs={'class': 'form-control mb-1',
                'id': 'inputTitle',
