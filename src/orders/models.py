@@ -44,6 +44,9 @@ class OrderManager(models.Manager):
         company = user.company
         return self.get_queryset().company_orders(company)
 
+    def get_by_company(self, company):
+        return self.get_queryset().company_orders(company)
+
     def all(self, user):
         if user.is_staff or user.is_admin:
             return self.get_queryset().all()

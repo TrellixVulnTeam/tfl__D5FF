@@ -23,7 +23,7 @@ from django.urls import path, include
 from .views import home_page
 from accounts.views import LoginView, RegisterView
 from products.views import ProductAddView
-from dashboard.views import DashboardView, ChartDataView
+from dashboard.views import DashboardView, DashboardDataApiView
 
 
 urlpatterns = [
@@ -31,10 +31,10 @@ urlpatterns = [
     path('account/', include('accounts.urls', namespace='account')),
     path('accounts/', include('accounts.passwords.urls')),
     path('add_product/', ProductAddView.as_view(), name='add_product'),
+    path('api/dashboard/', DashboardDataApiView.as_view(), name='dashboard-api'),
     path('cart/', include('carts.urls', namespace='cart')),
     path('companies/', include('companies.urls', namespace='companies')),
     path('dashboard/', DashboardView.as_view(), name='dashboard'),
-    path('api/dashboard/', ChartDataView.as_view(), name='dashboard-api'),
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('orders/', include('orders.urls', namespace='orders')),

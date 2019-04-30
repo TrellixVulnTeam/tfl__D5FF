@@ -29,7 +29,8 @@ class ProductListView(ListView):
             companies_ids.append(c['id'])
 
         if id is not None and found:
-            return Product.objects.get_by_company(id_company=id, user=user)
+            # return Product.objects.get_by_company(id_company=id, user=user)
+            return Product.objects.get_by_company(id_company=id)
         print(companies_ids)
         return Product.objects.all(user, companies_ids)
 

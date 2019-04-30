@@ -6,6 +6,11 @@ from django.utils.html import escape, conditional_escape
 # from django.utils.encoding import force_unicode
 
 
+class MyImagePostWidget(forms.widgets.ClearableFileInput):
+     template_name = "upload/upload_img_post.html"
+     is_required = True
+
+
 class MyImageWidget(forms.widgets.ClearableFileInput):
      template_name = "upload/upload_form.html"
 

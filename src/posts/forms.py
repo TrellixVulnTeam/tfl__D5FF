@@ -1,11 +1,11 @@
 from django import forms
 
 from .models import Post
-from tfl.forms import MyImageWidget
+from tfl.forms import MyImagePostWidget
 
 
 class PostForm(forms.ModelForm):
-    image = forms.ImageField(widget=MyImageWidget(), label='')
+    image = forms.ImageField(widget=MyImagePostWidget(), label='', required=True)
     description = forms.CharField(widget=forms.TextInput(
         attrs={'class': 'form-control mb-1',
                'id': 'inputDescription',

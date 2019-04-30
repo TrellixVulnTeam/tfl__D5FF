@@ -27,8 +27,7 @@ class SearchProductView(LoginRequiredMixin, ListView):
         companies_ids = []
         for c in companies_menu:
             companies_ids.append(c['id'])
-        print(self.request.GET)
         if not query and not category:
-            return Product.objects.all(user)
+            return Product.objects.all(user, companies_ids)
         else:
             return Product.objects.search(category, query, companies_ids)

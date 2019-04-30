@@ -107,7 +107,10 @@ class ProductManager(models.Manager):
     #         return self.get_queryset().active().get_by_company(id_company=id_company)
     #     else:
     #         return self.get_queryset().active().get_by_company(id_company=user.company)
-    def get_by_company(self, id_company, user):
+
+
+    # def get_by_company(self, id_company, user): #30.05.2019 zato sto se user nigdje ne koristi
+    def get_by_company(self, id_company):
         return self.get_queryset().get_by_company(id_company=id_company)
 
     def search(self, category, query, companies_ids):

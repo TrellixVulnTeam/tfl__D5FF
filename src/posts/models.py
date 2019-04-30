@@ -46,9 +46,10 @@ class PostManager(models.Manager):
         if user is not None:
             if user.is_authenticated:
                 user_obj = user
-        image = form.cleaned_data['image']
-        description = form.cleaned_data['description']
-        return self.model.objects.create(user=user_obj, description=description, image=image)
+                image = form.cleaned_data['image']
+                description = form.cleaned_data['description']
+                return self.model.objects.create(user=user_obj, description=description, image=image)
+        return None
 
     def remove(self, post_id):
         if post_id is not None and post_id != '':

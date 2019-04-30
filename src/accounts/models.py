@@ -23,13 +23,28 @@ class UserQuerySet(models.query.QuerySet):
     def staff(self):
         return self.filter(staff=True)
 
+    def active(self):
+        return self.filter(is_active=True)
+
+    def inactive(self):
+        return self.filter(is_active=False)
+
 
 class UserManager(BaseUserManager):
     def get_queryset(self):
         return UserQuerySet(self.model, using=self._db)
 
+    def active(self):
+        return self.get_queryset().active()
+
+    def inactive(self):
+        return self.get_queryset().inactive()
+
     def get_user_by_id(self, user_id):
         return self.get_queryset().filter(id=user_id)
+
+    def get_users_by_company(self, company_id):
+        return self.get_queryset().active().filter(company=company_id)
 
     def create_user(self, username, email, personal_name=None, address=None, phone=None, password=None, is_active=False, is_staff=False, is_admin=False):
         if not email:
