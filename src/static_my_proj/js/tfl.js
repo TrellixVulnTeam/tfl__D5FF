@@ -47,7 +47,10 @@ function cart_field_change(field_name, field_value, date_field) {
             },
             dataType: 'json',
             success: function (data) {
-
+                  console.log(data);
+                  if (data['error'] === 'true') {
+                        alert(data['error_message'])
+                  }
             }
       });
 }
@@ -113,9 +116,10 @@ function order_edit(cart_id) {
             },
             dataType: 'json',*/
             success: function (data) {
-                  if (data['refresh'] == 'true') {
+                  if (data['refresh'] === 'true') {
                         window.location.href = 'http://localhost:8000/cart/';
                   }
             }
       });
 }
+

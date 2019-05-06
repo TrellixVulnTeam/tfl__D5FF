@@ -1,9 +1,10 @@
-from django.http import Http404
+import json
+from django.http import Http404, HttpResponse
 from django.urls import reverse
 from django.views.generic import CreateView, FormView, DetailView, View, UpdateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, render_to_response
 from django.utils.safestring import mark_safe
 from django.views.generic.edit import FormMixin
 from .forms import LoginForm, RegisterForm, ReactivateUsernameForm, UserDetailChangeForm
@@ -60,9 +61,9 @@ class AccountUsernameActivateView(FormMixin, View):
         new_activation.send_activation()
         return super(AccountUsernameActivateView, self).form_valid(form)
 
-    def form_invalid(self, form):
-        context = {'form': form, 'key': self.key}
-        return render(self.request, 'registration/activation_error.html', context)
+    # def form_invalid(self, form):
+    #     context = {'form': form, 'key': self.key}
+    #     return render(self.request, 'registration/activation_error.html', context)
 
 
 class LoginView(NextUrlMixin, RequestFormAttachMixin, FormView):
@@ -74,6 +75,9 @@ class LoginView(NextUrlMixin, RequestFormAttachMixin, FormView):
     def form_valid(self, form):
         next_path = self.get_next_url()
         return redirect(next_path)
+
+    # def form_invalid(self, form):
+    #     return render(self.request, 'accounts/login.html', {'form': form})
 
 
 class RegisterView(CreateView):

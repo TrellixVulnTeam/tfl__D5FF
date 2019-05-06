@@ -129,6 +129,8 @@ def checkout_home(request):
         order_obj, new_order_obj = Order.objects.get_or_create(cart=cart_obj)
         request.session['cart_id'] = None
         request.session['cart_items'] = 0
+        msg = 'You have successfully made an order!'
+        messages.success(request, msg)
     return redirect('orders:home')
 
 
@@ -138,16 +140,27 @@ def cart_field_change(request):
     field_value = request.POST.get('field_value')
     date_field = request.POST.get('date_field')
     error = None
+    error_message = ""
+
+    data = {
+        "error": error,
+        "error_message": error_message
+    }
 
     if date_field == '1':
         field_value, error = utils.get_date_obj(field_value)
+        error, error_message = Cart.objects.check_date_field(request=request, field_name=field_name, field_value=field_value)
+
+        if error is True:
+            data["error"] = 'true'
+            data["error_message"] = error_message
 
     if error is False or error is None:
         cart_obj, new_obj = Cart.objects.new_or_get(request)
         setattr(cart_obj, field_name, field_value)
         cart_obj.save()
 
-    return JsonResponse({})
+    return JsonResponse(data)
 
 
 @csrf_exempt

@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth import authenticate, login, get_user_model
 from django.urls import reverse
 from django.utils.safestring import mark_safe
+from django.http import HttpResponse
 
 from .signals import user_logged_in
 from .models import UsernameActivation
@@ -110,18 +111,28 @@ class LoginForm(forms.Form):
         self.request = request
         super(LoginForm, self).__init__(*args, **kwargs)
 
+    # @property
     def clean(self):
         request = self.request
-        data = self.cleaned_data
-        username = data.get('username')
-        password = data.get('password')
+        # data = self.cleaned_data
+        # username = data.get('username')
+        # password = data.get('password')
+        #
+        # cleaned_data = super().clean()
+        # cc_myself = cleaned_data.get("cc_myself")
+        # subject = cleaned_data.get("subject")
+
+        data = super().clean()
+        username = data.get('username', None)
+        password = data.get('password', None)
+
         qs = User.objects.filter(username=username)
         if qs.exists():
             not_active = qs.filter(is_active=False)
             if not_active.exists():
                 link = reverse('account:resend_activation')
                 reconfirm_msg = '''Please <a href='{resend_link}'>
-                go here to resend activation!</a>.                
+                go here to resend activation!</a>.
                 '''.format(resend_link=link)
                 confirm_username = UsernameActivation.objects.filter(username=username)
                 is_confirmable = confirm_username.confirmable().exists()
@@ -132,9 +143,11 @@ class LoginForm(forms.Form):
                     raise forms.ValidationError(mark_safe(reconfirm_msg))
                 if not is_confirmable and not username_confirm_exists:
                     raise forms.ValidationError('This user not registered.')
+
         user = authenticate(request, username=username, password=password)
         if user is None:
-            raise forms.ValidationError('Invalid credentials')
+            raise forms.ValidationError('Invalid credentials. Wrong username and/or password!', code='invalid')
+
         login(request, user)
         self.user = user
         user_logged_in.send(user.__class__, instance=user, request=request)

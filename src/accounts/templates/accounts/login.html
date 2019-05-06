@@ -3,12 +3,19 @@
 
 {% block base_head %}
     <link rel="stylesheet" href="{% static 'css/tfl.css' %}">
+    <script href="{% static 'js/tfl.js' %}"></script>
 {% endblock %}
 {% block content %}
+    {% if form.errors %}
+        {% for error in form.non_field_errors %}
+            {% include "../messages/forms/error.html" with message=error %}
+        {% endfor %}
+    {% endif %}
     <form class="form-signin text-center" method="POST" action="{{ login_url }}" > {% csrf_token %}
         <img class="mb-4" src="{% static 'img/tforce_logo.png' %}" alt="" width="80" height="92">
         <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-        {{ form }}
+        {{ form.username }}
+        {{ form.password }}
         <button class="btn btn-lg btn-dark btn-block" type="submit">Sign in</button>
         <a class='form-control mt-5' href='{% url "password_reset" %}'>Forgot your password?</a>
         <p class="mt-5 mb-3 text-muted">© 2018-2019</p>

@@ -33,6 +33,67 @@ class CartManager(models.Manager):
                 company = user.company
         return self.model.objects.create(user=user_obj, company=company)
 
+    def check_date_field(self, request, field_name, field_value):
+        cart_obj, new_obj = self.new_or_get(request=request)
+        error = None
+        error_message = ""
+
+        if field_value is not None:
+            if field_name == 'beginning':
+                if cart_obj.ending is not None:
+                    if cart_obj.ending <= field_value:
+                        error = True
+                        error_message = "Beginning date is not valid!"
+                if cart_obj.delivery is not None:
+                    if cart_obj.delivery >= field_value:
+                        error = True
+                        error_message = "Beginning date is not valid!"
+                if cart_obj.pickup is not None:
+                    if cart_obj.pickup <= field_value:
+                        error = True
+                        error_message = "Beginning date is not valid!"
+            elif field_name == 'ending':
+                if cart_obj.beginning is not None:
+                    if cart_obj.beginning >= field_value:
+                        error = True
+                        error_message = "Ending date is not valid!"
+                if cart_obj.delivery is not None:
+                    if cart_obj.delivery >= field_value:
+                        error = True
+                        error_message = "Ending date is not valid!"
+                if cart_obj.pickup is not None:
+                    if cart_obj.pickup <= field_value:
+                        error = True
+                        error_message = "Ending date is not valid!"
+            elif field_name == 'delivery':
+                if cart_obj.beginning is not None:
+                    if cart_obj.beginning <= field_value:
+                        error = True
+                        error_message = "Delivery date is not valid!"
+                if cart_obj.ending is not None:
+                    if cart_obj.ending <= field_value:
+                        error = True
+                        error_message = "Delivery date is not valid!"
+                if cart_obj.pickup is not None:
+                    if cart_obj.pickup <= field_value:
+                        error = True
+                        error_message = "Delivery date is not valid!"
+            elif field_name == 'pickup':
+                if cart_obj.beginning is not None:
+                    if cart_obj.beginning >= field_value:
+                        error = True
+                        error_message = "Pickup date is not valid!"
+                if cart_obj.ending is not None:
+                    if cart_obj.ending >= field_value:
+                        error = True
+                        error_message = "Pickup date is not valid!"
+                if cart_obj.delivery is not None:
+                    if cart_obj.delivery >= field_value:
+                        error = True
+                        error_message = "Pickup date is not valid!"
+
+        return error, error_message
+
 
 class Cart(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)

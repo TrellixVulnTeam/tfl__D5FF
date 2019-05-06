@@ -55,6 +55,7 @@ def get_date_obj(date_value):
         try:
             timestamp = datetime.datetime.strptime(date_value, '%d/%m/%Y %H:%M').timestamp()
             datetime_obj = make_aware(datetime.datetime.fromtimestamp(timestamp))
+            datetime_obj = datetime_obj.replace(tzinfo=None)
             error = False
         except ValueError:
             datetime_obj = parse_date(date_value)
