@@ -138,7 +138,7 @@ class LoginForm(forms.Form):
                 is_confirmable = confirm_username.confirmable().exists()
                 if is_confirmable:
                     raise forms.ValidationError('Your account is not activated yet!')
-                    username_confirm_exists = UsernameActivation.objects.username_exists(username).exists()
+                username_confirm_exists = UsernameActivation.objects.username_exists(username).exists()
                 if username_confirm_exists:
                     raise forms.ValidationError(mark_safe(reconfirm_msg))
                 if not is_confirmable and not username_confirm_exists:

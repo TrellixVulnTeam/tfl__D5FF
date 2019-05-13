@@ -155,12 +155,24 @@ def cart_field_change(request):
             data["error"] = 'true'
             data["error_message"] = error_message
 
-    if error is False or error is None:
+    if (error is False or error is None) and field_value is not None:
         cart_obj, new_obj = Cart.objects.new_or_get(request)
         setattr(cart_obj, field_name, field_value)
         cart_obj.save()
 
     return JsonResponse(data)
+
+
+@csrf_exempt
+def clean_date(request):
+    field_name = request.POST.get('field_name')
+    field_value = None
+
+    cart_obj, new_obj = Cart.objects.new_or_get(request)
+    setattr(cart_obj, field_name, field_value)
+    cart_obj.save()
+
+    return JsonResponse({})
 
 
 @csrf_exempt

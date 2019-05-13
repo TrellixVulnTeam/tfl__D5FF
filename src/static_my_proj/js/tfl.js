@@ -36,7 +36,6 @@ function validate_quantity(product_id, product_quantity) {
 
 //For cart field
 function cart_field_change(field_name, field_value, date_field) {
-      //console.log(clean_func);
       $.ajax({
             type: 'POST',
             url: 'cart_field_change/',
@@ -47,10 +46,23 @@ function cart_field_change(field_name, field_value, date_field) {
             },
             dataType: 'json',
             success: function (data) {
-                  console.log(data);
                   if (data['error'] === 'true') {
-                        alert(data['error_message'])
+                        alert(data['error_message']);
+                        clean_date(field_name);
                   }
+            }
+      });
+}
+
+function clean_date(field_name) {
+      $.ajax({
+            type: 'POST',
+            url: 'clean_date/',
+            data: {
+                  'field_name': field_name
+            },
+            dataType: 'json',
+            success: function (data) {
             }
       });
 }
