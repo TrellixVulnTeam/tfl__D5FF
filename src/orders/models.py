@@ -32,6 +32,13 @@ class OrderQuerySet(models.query.QuerySet):
                    )
         return self.filter(lookups).order_by('-timestamp')
 
+    def by_cart_product(self, cart_products_obj):
+        lookups = (Q(cart__products__in=cart_products_obj) &
+                   Q(active=True))
+
+        return self.filter(lookups)
+    # def unavailable_products(self, product_obj, date_from):
+
 
 class OrderManager(models.Manager):
     def get_queryset(self):
@@ -52,6 +59,12 @@ class OrderManager(models.Manager):
             return self.get_queryset().all()
         else:
             return self.company_orders(user)
+
+    def num_unavailable_products(self, product_obj, date_from, date_to):
+        pass
+
+    def get_by_cart_product(self, cart_products_obj):
+        return self.get_queryset().by_cart_product(cart_products_obj)
 
 
 class Order(models.Model):

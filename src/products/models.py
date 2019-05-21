@@ -108,8 +108,8 @@ class ProductManager(models.Manager):
     #     else:
     #         return self.get_queryset().active().get_by_company(id_company=user.company)
 
-
     # def get_by_company(self, id_company, user): #30.05.2019 zato sto se user nigdje ne koristi
+
     def get_by_company(self, id_company):
         return self.get_queryset().get_by_company(id_company=id_company)
 
@@ -154,10 +154,21 @@ def product_pre_save_receiver(sender, instance, *args, **kwargs):
 pre_save.connect(product_pre_save_receiver, sender=Product)
 
 
+class CartProductQuerySet(models.query.QuerySet):
+    def by_product(self, product_obj):
+        return self.filter(product=product_obj)
+
+
 class CartProductManager(models.Manager):
+    def get_queryset(self):
+        return CartProductQuerySet(self.model, using=self._db)
+
     def new(self, product):
         product_obj = product
         return self.model.objects.create(product=product_obj)
+
+    def get_by_product(self, product_obj):
+        return self.get_queryset().by_product(product_obj)
 
 
 class CartProduct(models.Model):

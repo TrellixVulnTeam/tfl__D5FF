@@ -195,16 +195,17 @@ def validate_quantity(request):
     try:
         product_obj = Product.objects.get(id=product_id)
         cart_obj, new_obj = Cart.objects.new_or_get(request)
-        for p in cart_obj.products.all():
-            if p.product == product_obj:
-                p.quantity = product_quantity
-                p.save()
-                cart_obj.save()
-
-                data = {
-                    'total_weight': cart_obj.total_weight,
-                    'total_price': cart_obj.total_price
-                }
+        # for p in cart_obj.products.all():
+        #     if p.product == product_obj:
+        #         p.quantity = product_quantity
+        #         p.save()
+        #         cart_obj.save()
+        #
+        #         data = {
+        #             'total_weight': cart_obj.total_weight,
+        #             'total_price': cart_obj.total_price
+        #         }
+        data = cart_obj.validate_quantity(product_obj, product_quantity)
     except Product.DoesNotExist:
         return redirect('cart:home')
 

@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.db.models.signals import pre_save, post_save, m2m_changed
+from django.apps import apps
 
 
 from products.models import CartProduct
@@ -124,6 +125,29 @@ class Cart(models.Model):
     #     self.delivery = self.delivery.replace(tzinfo=None)
     #     self.pickup = self.pickup.replace(tzinfo=None)
     #     super(Cart, self).save(*args, **kwargs)
+
+    def validate_quantity(self, product_obj, product_quantity):
+        data = {}
+        # self.objects.num_unavailable_products(product_obj)
+        cart_products_obj = CartProduct.objects.get_by_product(product_obj)  # Ovo vraca listu produkata
+                                                                             # koji su nekad bili u korpi
+                                                                             # (ne mora da znaci da su zavrsili u porudzbini)
+        Order = apps.get_model('orders', 'Order')
+        # print(product_obj.id)
+        print(Order.objects.get_by_cart_product(cart_products_obj))
+        # print(str(Order.objects.get_by_product(product_obj).query))
+        for p in self.products.all():
+            if p.product == product_obj:
+                p.quantity = product_quantity
+                p.save()
+                self.save()
+
+                data = {
+                    'total_weight': self.total_weight,
+                    'total_price': self.total_price
+                }
+
+        return data
 
 
 def pre_save_cart_receiver(sender, instance, action, *args, **kwargs):

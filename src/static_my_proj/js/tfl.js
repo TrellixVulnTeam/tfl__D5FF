@@ -49,6 +49,8 @@ function cart_field_change(field_name, field_value, date_field) {
                   if (data['error'] === 'true') {
                         alert(data['error_message']);
                         clean_date(field_name);
+                        document.getElementsByName(field_name)[0].value = '';
+
                   }
             }
       });
