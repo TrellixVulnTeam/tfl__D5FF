@@ -128,24 +128,61 @@ class Cart(models.Model):
 
     def validate_quantity(self, product_obj, product_quantity):
         data = {}
+
+        error = 'false'
+        error_msg = ''
+        last_quant = 0
+
+        delivery = self.delivery
+        pickup = self.pickup
+
         # self.objects.num_unavailable_products(product_obj)
         cart_products_obj = CartProduct.objects.get_by_product(product_obj)  # Ovo vraca listu produkata
                                                                              # koji su nekad bili u korpi
                                                                              # (ne mora da znaci da su zavrsili u porudzbini)
         Order = apps.get_model('orders', 'Order')
-        # print(product_obj.id)
-        print(Order.objects.get_by_cart_product(cart_products_obj))
-        # print(str(Order.objects.get_by_product(product_obj).query))
-        for p in self.products.all():
-            if p.product == product_obj:
-                p.quantity = product_quantity
-                p.save()
-                self.save()
 
-                data = {
-                    'total_weight': self.total_weight,
-                    'total_price': self.total_price
-                }
+        if delivery is not None and pickup is not None:
+            orders_obj = Order.objects.get_by_cart_products(cart_products_obj)
+            total_unavailable_quant = 0
+            for order in orders_obj:
+                order_delivery = order.cart.delivery
+                order_pickup = order.cart.pickup
+
+                cp_exist = False
+                for cp in cart_products_obj:
+                    cp_exist = Order.objects.cp_exist(order, cp)
+
+                    if cp_exist and ((delivery < order_delivery and pickup > order_delivery) or
+                    (delivery > order_delivery and pickup < order_pickup) or
+                    (delivery < order_pickup and pickup > order_pickup)):
+
+                        total_unavailable_quant += cp.quantity
+
+            for p in self.products.all():
+                if p.product == product_obj:
+                    available = product_obj.quantity - total_unavailable_quant
+
+                    if available >= int(product_quantity):
+                        p.quantity = product_quantity
+                        p.save()
+                        self.save()
+                    else:
+                        error = 'true'
+                        error_msg = 'There is not enough quantity for this product'
+                        last_quant = p.quantity
+
+        else:
+            error = 'true'
+            error_msg = 'Please fill delivery and pickup date!'
+
+        data = {
+            'error': error,
+            'last_quant': last_quant,
+            'error_message': error_msg,
+            'total_weight': self.total_weight,
+            'total_price': self.total_price
+        }
 
         return data
 

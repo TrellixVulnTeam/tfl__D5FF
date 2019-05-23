@@ -32,12 +32,19 @@ class OrderQuerySet(models.query.QuerySet):
                    )
         return self.filter(lookups).order_by('-timestamp')
 
-    def by_cart_product(self, cart_products_obj):
+    def by_cart_products(self, cart_products_obj):
         lookups = (Q(cart__products__in=cart_products_obj) &
                    Q(active=True))
 
         return self.filter(lookups)
-    # def unavailable_products(self, product_obj, date_from):
+
+    def cp_exist(self, order, cart_product):
+        lookups = (Q(id=order.id) & Q(cart__products=cart_product))
+
+        qs = self.filter(lookups)
+        if qs.count() == 1:
+            return True
+        return False
 
 
 class OrderManager(models.Manager):
@@ -60,11 +67,11 @@ class OrderManager(models.Manager):
         else:
             return self.company_orders(user)
 
-    def num_unavailable_products(self, product_obj, date_from, date_to):
-        pass
+    def get_by_cart_products(self, cart_products_obj):
+        return self.get_queryset().by_cart_products(cart_products_obj)
 
-    def get_by_cart_product(self, cart_products_obj):
-        return self.get_queryset().by_cart_product(cart_products_obj)
+    def cp_exist(self, order, cart_product):
+        return self.get_queryset().cp_exist(order, cart_product)
 
 
 class Order(models.Model):

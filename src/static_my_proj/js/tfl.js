@@ -25,9 +25,13 @@ function validate_quantity(product_id, product_quantity) {
             },
             dataType: 'json',
             success: function (data) {
-                  if (data) {
+                  if (data['error'] !== 'true') {
                         document.getElementById('total_weight').innerHTML ="Weight: " + data.total_weight;
                         document.getElementById('total_price').innerHTML ="Total: " + data.total_price;
+                  } else {
+                        document.getElementById(product_id).value = data['last_quant'];
+                        alert(data['error_message']);
+
                   }
             }
       });
