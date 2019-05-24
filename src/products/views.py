@@ -32,7 +32,8 @@ class ProductListView(ListView):
             # return Product.objects.get_by_company(id_company=id, user=user)
             return Product.objects.get_by_company(id_company=id)
         print(companies_ids)
-        return Product.objects.all(user, companies_ids)
+        # return Product.objects.all(user, companies_ids)
+        return Product.objects.all_by_companies(user, companies_ids)
 
     def get_context_data(self, *args, **kwargs):
         context = super(ProductListView, self).get_context_data(*args, **kwargs)

@@ -39,35 +39,22 @@
                           <a href="{{p.product.get_absolute_url}}"> {{p.product.title}}</a>
                         </td>
                         <td style="width: 15%;">
-                          <input style="height: 27px" class="form-control" type="number" value="{{ p.quantity }}" id="{{ p.product.id }}" onchange="validate_quantity({{ p.product.id }}, this.value)">
+                          <input style="height: 27px" class="form-control" type="number" value="{{ p.quantity }}" id="{{ p.product.id }}" min="1" onchange="validate_quantity({{ p.product.id }}, this.value)">
                         </td>
                         <td style="width: 15%">{{ p.product.price }}</td>
                         <td style="width: 5%">
-{#                          <form method="POST" action="{% url 'cart:remove' %}" class="form" style="justify-content: center; display: flex;"> {% csrf_token %}#}
-{#                            <input type="hidden" name="product_id" value="{{ p.product.id }}" />#}
-{#                            <button title="Remove" type="submit" style="border: None; background: None"><i class="fas fa-trash-alt"></i></button>#}
-{#                          </form>#}
                             <button title="Remove" style="border: None; background: None" onclick="cart_product_remove({{ p.product.id }})"><i class="fas fa-trash-alt"></i></button>
                         </td>
                       </tr>
                       {% endfor %}
                       <tr>
-                        <td colspan="4"></td>
-                        <td id="total_weight">Weight: {{ cart.total_weight }}</td>
+{#                        <td colspan="4"></td>#}
+                          <td colspan="5" id="total_weight" style="text-align: right">Weight: <b>{{ cart.total_weight }}</b></td>
                       </tr>
                       <tr>
-                        <td colspan="4"></td>
-                        <td id="total_price">Total: {{ cart.total_price }}</td>
-                      </tr>
-{#                      <tr>#}
 {#                        <td colspan="4"></td>#}
-{#                        <td>#}
-{#                                  <form method="POST" action="{% url 'cart:checkout' %}" class="form col-md-12" style="justify-content: center; display: flex;"> {% csrf_token %}  #}
-{#                          <form method="POST" action="{% url 'cart:checkout' %}" > {% csrf_token %}#}
-{#                            <button type="submit" class="btn btn-lg btn-success">Checkout</button>#}
-{#                          </form>#}
-{#                        </td>#}
-{#                      </tr>#}
+                        <td colspan="5" id="total_weight" style="text-align: right" id="total_price">Total: <b>{{ cart.total_price }}</b></td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
@@ -85,5 +72,26 @@
                 })
             });
         </script>
+
+    <!-- Modal u slucaju greske -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalCenterTitle">Error</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p id="error_message"></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
 {% endblock %}

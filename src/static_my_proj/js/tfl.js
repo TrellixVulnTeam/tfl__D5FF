@@ -26,11 +26,14 @@ function validate_quantity(product_id, product_quantity) {
             dataType: 'json',
             success: function (data) {
                   if (data['error'] !== 'true') {
-                        document.getElementById('total_weight').innerHTML ="Weight: " + data.total_weight;
+                        document.getElementById('total_weight').innerHTML ="Weight: <b/>" + data.total_weight;
                         document.getElementById('total_price').innerHTML ="Total: " + data.total_price;
                   } else {
                         document.getElementById(product_id).value = data['last_quant'];
-                        alert(data['error_message']);
+                        //alert(data['error_message']);
+                        document.getElementById('error_message').innerHTML = data['error_message'];
+                        $('#exampleModalCenter').modal('show');
+
 
                   }
             }
@@ -51,7 +54,9 @@ function cart_field_change(field_name, field_value, date_field) {
             dataType: 'json',
             success: function (data) {
                   if (data['error'] === 'true') {
-                        alert(data['error_message']);
+                        document.getElementById('error_message').innerHTML = data['error_message'];
+                        $('#exampleModalCenter').modal('show');
+
                         clean_date(field_name);
                         document.getElementsByName(field_name)[0].value = '';
 

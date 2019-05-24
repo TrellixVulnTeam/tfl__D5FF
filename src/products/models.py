@@ -56,7 +56,7 @@ class ProductCategory(models.Model):
 
 
 class ProductQuerySet(models.query.QuerySet):
-    def all(self, companies_ids):
+    def all_by_companies(self, companies_ids):
         print(companies_ids)
         return self.filter(company__in=companies_ids).filter(active=True).order_by('-timestamp')
 
@@ -88,10 +88,10 @@ class ProductManager(models.Manager):
     def get_queryset(self):
         return ProductQuerySet(self.model, using=self._db)
 
-    def all(self, user, companies_ids):
+    def all_by_companies(self, user, companies_ids):
         # if user.is_authenticated:
         #     if user.is_staff or user.is_admin:
-                return self.get_queryset().all(companies_ids)
+                return self.get_queryset().all_by_companies(companies_ids)
             # else:
             #     return self.get_by_company(id_company=user.company, user=user)
         # return None
