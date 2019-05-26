@@ -57,7 +57,6 @@ class ProductCategory(models.Model):
 
 class ProductQuerySet(models.query.QuerySet):
     def all_by_companies(self, companies_ids):
-        print(companies_ids)
         return self.filter(company__in=companies_ids).filter(active=True).order_by('-timestamp')
 
     def get_by_company(self, id_company):
@@ -115,11 +114,11 @@ class ProductManager(models.Manager):
 
     def search(self, category, query, companies_ids):
         if category and query:
-            return self.get_queryset().all(companies_ids).search_cq(category, query)
+            return self.get_queryset().all_by_companies(companies_ids).search_cq(category, query)
         elif category:
-            return self.get_queryset().all(companies_ids).search_c(category)
+            return self.get_queryset().all_by_companies(companies_ids).search_c(category)
         else:
-            return self.get_queryset().all(companies_ids).search_q(query)
+            return self.get_queryset().all_by_companies(companies_ids).search_q(query)
 
 
 class Product(models.Model):

@@ -31,7 +31,7 @@ class ProductListView(ListView):
         if id is not None and found:
             # return Product.objects.get_by_company(id_company=id, user=user)
             return Product.objects.get_by_company(id_company=id)
-        print(companies_ids)
+        # print(companies_ids)
         # return Product.objects.all(user, companies_ids)
         return Product.objects.all_by_companies(user, companies_ids)
 
@@ -136,7 +136,7 @@ class ProductAddView(LoginRequiredMixin, CreateView):
 
 
 @csrf_exempt
-def cart_add(request):
+def cart_add(request, slug=None):
     product_id = request.POST.get('product_id')
     data = {
         'refresh': 'false'

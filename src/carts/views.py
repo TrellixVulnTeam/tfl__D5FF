@@ -100,38 +100,25 @@ class CartView(LoginRequiredMixin, NextUrlMixin, UpdateView):
 def checkout_home(request):
     cart_obj, cart_created = Cart.objects.new_or_get(request)
     order_obj = None
-    if cart_created or cart_obj.products.count() == 0:
-        msg = 'Cart is empty!'
-        messages.warning(request, msg)
+
+    if cart_obj.beginning is None or cart_obj.ending is None or cart_obj.delivery is None or cart_obj.pickup is None:
+        msg = 'Dates field must be fill!'
+        messages.error(request, msg)
 
         return redirect('cart:home')
     else:
-        # if request.method == 'POST':
-        #     form = CartForm(request.POST)
-        #     if form.is_valid():
-        #         cart_obj.manifestation = form.cleaned_data.get('manifestation')
-        #         cart_obj.address = form.cleaned_data.get('address')
-        #         cart_obj.beginning = form.cleaned_data.get('beginning')
-        #         cart_obj.ending = form.cleaned_data.get('ending')
-        #         cart_obj.delivery = form.cleaned_data.get('delivery')
-        #         cart_obj.pickup = form.cleaned_data.get('pickup')
-        #         cart_obj.personal_name = form.cleaned_data.get('personal_name')
-        #         cart_obj.email = form.cleaned_data.get('email')
-        #         cart_obj.phone = form.cleaned_data.get('phone')
-        #         cart_obj.save()
-        # else:
-        #     form = CartForm()
+        if cart_created or cart_obj.products.count() == 0:
+            msg = 'Cart is empty!'
+            messages.warning(request, msg)
 
-        # old_order_id = request.session.get('order_id')
-        # if old_order_id is not None:
-        #     old_order_obj = Order.objects.get(id=old_order_id)
-        #     old_order_obj.deactivate()
-        order_obj, new_order_obj = Order.objects.get_or_create(cart=cart_obj)
-        request.session['cart_id'] = None
-        request.session['cart_items'] = 0
-        msg = 'You have successfully made an order!'
-        messages.success(request, msg)
-    return redirect('orders:home')
+            return redirect('cart:home')
+        else:
+            order_obj, new_order_obj = Order.objects.get_or_create(cart=cart_obj)
+            request.session['cart_id'] = None
+            request.session['cart_items'] = 0
+            msg = 'You have successfully made an order!'
+            messages.success(request, msg)
+            return redirect('orders:home')
 
 
 @csrf_exempt

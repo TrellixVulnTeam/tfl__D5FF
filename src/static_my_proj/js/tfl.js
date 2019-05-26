@@ -43,26 +43,34 @@ function validate_quantity(product_id, product_quantity) {
 
 //For cart field
 function cart_field_change(field_name, field_value, date_field) {
-      $.ajax({
-            type: 'POST',
-            url: 'cart_field_change/',
-            data: {
-                  'field_name': field_name,
-                  'field_value': field_value,
-                  'date_field': date_field
-            },
-            dataType: 'json',
-            success: function (data) {
-                  if (data['error'] === 'true') {
-                        document.getElementById('error_message').innerHTML = data['error_message'];
-                        $('#exampleModalCenter').modal('show');
+      if (field_value === '' || typeof field_value === 'undefined') {
+           console.log('prazno');
+      } else {
+            $.ajax({
+                  type: 'POST',
+                  url: 'cart_field_change/',
+                  data: {
+                        'field_name': field_name,
+                        'field_value': field_value,
+                        'date_field': date_field
+                  },
+                  dataType: 'json',
+                  success: function (data) {
+                        if (data['error'] === 'true') {
+                              document.getElementById('error_message').innerHTML = data['error_message'];
+                              $('#exampleModalCenter').modal('show');
 
-                        clean_date(field_name);
-                        document.getElementsByName(field_name)[0].value = '';
+                              clean_date(field_name);
+                              document.getElementsByName(field_name)[0].value = '';
 
+                        }
+                  },
+                  error: function (e) {
+                        console.log('Doslo je do greske');
+                        console.log(e.toString());
                   }
-            }
-      });
+            });
+      }
 }
 
 function clean_date(field_name) {
@@ -140,7 +148,7 @@ function order_edit(cart_id) {
             dataType: 'json',*/
             success: function (data) {
                   if (data['refresh'] === 'true') {
-                        window.location.href = 'http://localhost:8000/cart/';
+                        window.location.href = 'http://94.189.247.96:8000/cart/';
                   }
             }
       });

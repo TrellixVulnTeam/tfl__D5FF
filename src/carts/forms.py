@@ -29,7 +29,8 @@ class CartForm(forms.ModelForm):
             'minDate': (datetime.date.today() + datetime.timedelta(days=1)).strftime('%Y-%m-%d'),  # Tomorrow
             'useCurrent': False,
             'collapse': False,
-            'format': 'DD/MM/YYYY HH:mm'
+            'format': 'DD/MM/YYYY HH:mm',
+            'ignoreReadonly': True
         },
         attrs={'class': 'form-control',
                'id': 'inputBiginning',
@@ -38,15 +39,18 @@ class CartForm(forms.ModelForm):
                'input_toggle': True,
                'icon_toggle': True,
                'name': 'beginning',
+               'readonly': 'readonly',
                'onChange': 'cart_field_change(name, value, 1)'
+
                }
-    ), label='')
+    ), label='', required=True)
     ending = forms.CharField(widget=DateTimePicker(
         options={
             'minDate': (datetime.date.today() + datetime.timedelta(days=1)).strftime('%Y-%m-%d'),  # Tomorrow
             'useCurrent': False,
             'collapse': False,
-            'format': 'DD/MM/YYYY HH:mm'
+            'format': 'DD/MM/YYYY HH:mm',
+            'ignoreReadonly': True
         },
         attrs={'class': 'form-control',
                'id': 'inputEnding',
@@ -55,6 +59,7 @@ class CartForm(forms.ModelForm):
                'input_toggle': True,
                'icon_toggle': True,
                'name': 'ending',
+               'readonly': 'readonly',
                'onChange': 'cart_field_change(name, value, 1)'
                }
     ), label='')
@@ -63,7 +68,8 @@ class CartForm(forms.ModelForm):
             'minDate': (datetime.date.today() + datetime.timedelta(days=1)).strftime('%Y-%m-%d'),  # Tomorrow
             'useCurrent': False,
             'collapse': False,
-            'format': 'DD/MM/YYYY HH:mm'
+            'format': 'DD/MM/YYYY HH:mm',
+            'ignoreReadonly': True
         },
         attrs={'class': 'form-control',
                'id': 'inputDelivery',
@@ -72,6 +78,7 @@ class CartForm(forms.ModelForm):
                'input_toggle': True,
                'icon_toggle': True,
                'name': 'delivery',
+               'readonly': 'readonly',
                'onChange': 'cart_field_change(name, value, 1)'
                }
     ), label='')
@@ -80,7 +87,8 @@ class CartForm(forms.ModelForm):
             'minDate': (datetime.date.today() + datetime.timedelta(days=1)).strftime('%Y-%m-%d'),  # Tomorrow
             'useCurrent': False,
             'collapse': False,
-            'format': 'DD/MM/YYYY HH:mm'
+            'format': 'DD/MM/YYYY HH:mm',
+            'ignoreReadonly': True
         },
         attrs={'class': 'form-control',
                'id': 'inputPickup',
@@ -89,6 +97,7 @@ class CartForm(forms.ModelForm):
                'input_toggle': True,
                'icon_toggle': True,
                'name': 'pickup',
+               'readonly': 'readonly',
                'onChange': 'cart_field_change(name, value, 1)'
                }
     ), label='')

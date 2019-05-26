@@ -3,13 +3,24 @@
         <div class="input-group mb-3">
             <div class="input-group-prepend">
                 <select class="custom-select" id="input_category" name="c">
-                    <option selected value="">Category</option>
-                    {% for category in category_list %}
-                        <option value="{{category.id}}">{{category.name}}</option>
-                    {% endfor %}
+                    {% if c is None or c == "" %}
+                        <option selected value="">Category</option>
+                        {% for category in category_list %}
+                            <option value="{{category.id}}">{{category.name}}</option>
+                        {% endfor %}
+                    {% else %}
+                        <option value="">Category</option>
+                        {% for category in category_list %}
+                            {% if c == category %}
+                                <option selected value="{{category.id}}">{{category.name}}</option>
+                            {% else %}
+                                <option value="{{category.id}}">{{category.name}}</option>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
                 </select>
             </div>
-            <input type="text" class="form-control" placeholder="Search products" name="q" aria-label="Recipient's username" aria-describedby="basic-addon2">
+            <input type="text" class="form-control" placeholder="Search products" value="{{ q }}" name="q" aria-label="Recipient's username" aria-describedby="basic-addon2">
             <div class="input-group-append">
                 <button class="btn btn-outline-secondary" type="submit">Search</button>
             </div>

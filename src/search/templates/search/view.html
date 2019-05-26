@@ -2,14 +2,14 @@
 {% load static %}
 
 {% block content %}
-    {% if query %}
-        {% include 'search/snippets/search-form.html' with category_list=all_categories %}
-        <div class="mt-5">
-            Results for <b>{{ query }}</b>
-        </div>
-    {% else %}
-        {% include 'search/snippets/search-form.html' with category_list=all_categories %}
-    {% endif %}
+{#    {% if query or category %}#}
+        {% include 'search/snippets/search-form.html' with category_list=all_categories q=query c=category %}
+{#        <div class="mt-5">#}
+{#            Results for <b>{{ query }}</b> {{ category }}#}
+{#        </div>#}
+{#    {% else %}#}
+{#        {% include 'search/snippets/search-form.html' with category_list=all_categories %}#}
+{#    {% endif %}#}
         <hr/>
         <div class="card-deck">
             {% for obj in object_list %}

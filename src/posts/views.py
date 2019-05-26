@@ -35,7 +35,7 @@ def post_add(request):
     if request.method == 'POST':
         success_url = '/'
         form = PostForm(request.POST or None, request.FILES or None)
-        print(form.is_valid())
+        # print(form.is_valid())
         if form.is_valid():
             Post.objects.new(user=request.user, form=form)
             return redirect(success_url)

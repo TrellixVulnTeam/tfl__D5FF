@@ -10,10 +10,16 @@ class SearchProductView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(SearchProductView, self).get_context_data(*args, **kwargs)
+        category_obj = None
         query = self.request.GET.get('q')
-        # category = self.request.GET.get('c')
+        category_id = self.request.GET.get('c')
+
+        if category_id is not None and category_id != '':
+            category_obj = ProductCategory.objects.get_by_id(category_id)
+
         all_categories = ProductCategory.objects.all()
         context['query'] = query
+        context['category'] = category_obj
         context['all_categories'] = all_categories
         return context
 
@@ -28,6 +34,6 @@ class SearchProductView(LoginRequiredMixin, ListView):
         for c in companies_menu:
             companies_ids.append(c['id'])
         if not query and not category:
-            return Product.objects.all(user, companies_ids)
+            return Product.objects.all_by_companies(user, companies_ids)
         else:
             return Product.objects.search(category, query, companies_ids)
