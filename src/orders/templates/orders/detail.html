@@ -13,7 +13,7 @@
 
     <div class="row">
 {#      <form method="POST" action="{% url 'cart:checkout' %}" class="form col-md-12" style="justify-content: center; display: flex;"> {% csrf_token %}#}
-            <div class="col-md-6">
+        <div class="col-md-6">
             <div class="input-group">
               <div class="input-group-prepend">
                   <span class="input-group-text" id="inputGroupPrepend2" style="width: 120px">Manifestation</span>
@@ -81,8 +81,8 @@
                 <button type="button" class="btn btn-info" onclick="order_edit({{ object.cart.id }})">Edit</button>
                 <button type="button" class="btn btn-info">Cancel</button>
             {% endif %}
-
       </div>
+
       <div class="col-md-6">
         <div class="table-responsive-sm">
           <table class="table table-sm">

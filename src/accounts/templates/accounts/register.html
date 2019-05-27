@@ -5,10 +5,25 @@
     <link rel="stylesheet" href="{% static 'css/tfl.css' %}">
 {% endblock %}
 {% block content %}
+    {% if form.errors %}
+        {% for field in form %}
+            {% if field.errors %}
+                {% for error in field.errors %}
+                    {% include "../messages/forms/error.html" with message=error %}
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
     <form class="form-signin text-center" method="POST" action="{{ register_url }}" > {% csrf_token %}
-      <img class="mb-4" src="{% static 'img/tforce_logo.png' %}" alt="" width="80" height="92">
-      <h1 class="h3 mb-3 font-weight-normal">Please register</h1>
-      {{ form }}
+        <img class="mb-4" src="{% static 'img/tforce_logo.png' %}" alt="" width="80" height="92">
+        <h1 class="h3 mb-3 font-weight-normal">Please register</h1>
+        {{ form.personal_name }}
+        {{ form.username }}
+        {{ form.email }}
+        {{ form.address }}
+        {{ form.phone }}
+        {{ form.password }}
+        {{ form.password2 }}
       <button class="btn btn-lg btn-dark btn-block" type="submit">Register</button>
       <p class="mt-5 mb-3 text-muted">© 2018-2019</p>
     </form>

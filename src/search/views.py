@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from products.models import Product, ProductCategory
 
 
-class SearchProductView(LoginRequiredMixin, ListView):
+class SearchProductView(ListView):
     template_name = "search/view.html"
 
     def get_context_data(self, *args, **kwargs):

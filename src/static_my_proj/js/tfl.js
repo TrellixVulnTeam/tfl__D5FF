@@ -148,7 +148,7 @@ function order_edit(cart_id) {
             dataType: 'json',*/
             success: function (data) {
                   if (data['refresh'] === 'true') {
-                        window.location.href = 'http://94.189.247.96:8000/cart/';
+                        window.location.href = 'http://localhost:8000/cart/';
                   }
             }
       });
