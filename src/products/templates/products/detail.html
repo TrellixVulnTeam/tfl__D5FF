@@ -17,15 +17,28 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <small class="text-muted">Last updated 3 mins ago</small>
+                        <div class="row">
+                            <div class="col-md-10">
+                                <small class="text-muted">Last updated {{object.updated|timesince}} ago</small>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="text-right">
+                                    {% if request.user.is_staff %}
+                                        <a href="{% url 'products:edit' slug=object.slug %}">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                {% if request.user.is_staff %}
-                    <form class="text-left" method="GET" action="{% url 'products:edit' slug=object.slug %}">
-                        <button type="submit" class="btn btn-dark">Edit</button>
-                    </form>
-                {% endif %}
+{#                {% if request.user.is_staff %}#}
+{#                    <form class="text-left" method="GET" action="{% url 'products:edit' slug=object.slug %}">#}
+{#                        <button type="submit" class="btn btn-dark">Edit</button>#}
+{#                    </form>#}
+{#                {% endif %}#}
 
             </div>
             <div class="col-sm-8  mt-5">

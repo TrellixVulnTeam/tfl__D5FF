@@ -42,6 +42,7 @@ class ProductListView(ListView):
         # p = Paginator(Product.objects.select_related().all(), self.paginate_by)
         p = Paginator(products, self.paginate_by)
         context['products'] = p.page(context['page_obj'].number)
+        context['num_pages'] = p.num_pages
         all_categories = ProductCategory.objects.all()
         context['all_categories'] = all_categories
 
